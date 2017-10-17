@@ -48,7 +48,7 @@ function scaleVector (vector) {
   return result
 }
 
-function write (endVector, startVector) {
+function flatWrite (endVector, startVector) {
   startVector = startVector || [0, 0]
   var scaledStart = scaleVector(startVector)
   var scaledEnd = scaleVector(endVector)
@@ -57,25 +57,11 @@ function write (endVector, startVector) {
   ctx.stroke()
 }
 axes()
-write(vector1)
+flatWrite(vector1)
 
-function vectMatMul (matrix, vector) {
-  var i
-  var wrappedV = []
-  for (i = 0; i < vector.length; i++) {
-    wrappedV.push([vector[i]])
-  }
-  var wrappedResult = matMul(matrix, wrappedV)
-  var result = []
-  for (i = 0; i < wrappedResult.length; i++) {
-    result.push(wrappedResult[i][0])
-  }
-  return result
-}
-
-// write(vectMatMul(twoDimIdentity, vector1));
-// write(vectMatMul(test1, vector1));
-// write(vectMatMul(test2, vector1));
+// flatWrite(vectMatMul(twoDimIdentity, vector1));
+// flatWrite(vectMatMul(test1, vector1));
+// flatWrite(vectMatMul(test2, vector1));
 
 var sqr = {
   tl: [1, 3],
@@ -85,10 +71,10 @@ var sqr = {
 }
 
 function printSquare (tl, bl, tr, br) {
-  write(tl, tr)
-  write(bl, br)
-  write(tl, bl)
-  write(tr, br)
+  flatWrite(tl, tr)
+  flatWrite(bl, br)
+  flatWrite(tl, bl)
+  flatWrite(tr, br)
 }
 
 printSquare(sqr.tl, sqr.bl, sqr.tr, sqr.br)

@@ -14,7 +14,7 @@ var cube = {
   nbl: [-40.0, -40.0, 40.0],
   nbr: [40.0, -40.0, 40.0],
   ftl: [-40.0, 40.0, -40.0],
-  ftr: [40.0, 40.0, -40.0],
+  ftr: [40, 40, -40.0],
   fbl: [-40.0, -40.0, -40.0],
   fbr: [40.0, -40.0, -40.0]
 }
@@ -38,7 +38,7 @@ function transform (matrix, point) {
 // somewhere to look from, the centre of my window
 var windowLocation =
   // [x, y, z]
-    [0.0, 0.0, 70.0]
+    [0.0, 0.0, 270.0]
 
 // var windowOrientation =
 //   // this point and the window location should be enough
@@ -82,23 +82,55 @@ function mapPointsToPlane (pointsObject) {
   var ml = myLocation
   for (var i = 0; i < objKeys.length; i++) {
     var point = pointsObject[objKeys[i]]
+    if (point[2] < myLocation[2]) {
     // x
-    var Ax = point[0]
-    var Az = ml[2] - point[2]
-    // console.log("My distance from object: " + Az)
-    var Bz = ml[2] - windowLocation[2]
-    // console.log("My distance from camera: " + Bz)
-    var Bx = Ax * (Bz / Az)
+      var Ax = point[0]
+      var Az = ml[2] - point[2]
+      // console.log("My distance from object: " + Az)
+      var Bz = ml[2] - windowLocation[2]
+      // console.log("My distance from camera: " + Bz)
+      var Bx = Ax * (Bz / Az)
 
-    // y
-    var Ay = point[1]
-    // var Az = ml[2] - point[2];
-    // var Bz = ml[2] - windowLocation[2];
-    var By = Ay * (Bz / Az)
+      // y
+      var Ay = point[1]
+      // var Az = ml[2] - point[2];
+      // var Bz = ml[2] - windowLocation[2];
+      var By = Ay * (Bz / Az)
 
-    mappedObj[objKeys[i]] = [Bx, By]
+      mappedObj[objKeys[i]] = [Bx, By]
+    } else {
+      mappedObj[objKeys[i]] = [0, 0]
+    }
   }
   return mappedObj
+}
+
+function mapPointsArrToPlane (arr) {
+  var ml = myLocation
+  var mapped = []
+  for (var i = 0; i < arr.length; i++) {
+    var point = arr[i]
+    if (point[2] < myLocation[2]) {
+    // x
+      var Ax = point[0]
+      var Az = ml[2] - point[2]
+      // console.log("My distance from object: " + Az)
+      var Bz = ml[2] - windowLocation[2]
+      // console.log("My distance from camera: " + Bz)
+      var Bx = Ax * (Bz / Az)
+
+      // y
+      var Ay = point[1]
+      // var Az = ml[2] - point[2];
+      // var Bz = ml[2] - windowLocation[2];
+      var By = Ay * (Bz / Az)
+
+      mapped[i] = [Bx, By]
+    } else {
+      mapped[i] = [0, 0]
+    }
+  }
+  return mapped
 }
 
 var flatCube = mapPointsToPlane(cube)
@@ -114,40 +146,45 @@ function scaleVector2 (vector) {
   return result
 }
 
-function write3d (endVector, startVector) {
+function write (endVector, startVector) {
+  // console.log('hello')
+  // console.log(startVector + '. ' + endVector)
   startVector = startVector || [0, 0]
   var scaledStart = scaleVector2(startVector)
   var scaledEnd = scaleVector2(endVector)
-  ctx2.moveTo(scaledStart[0], scaledStart[1])
+  ctx2.lineTo(scaledStart[0], scaledStart[1])
   ctx2.lineTo(scaledEnd[0], scaledEnd[1])
+
+
   ctx2.stroke()
 }
 function writeFlatCube (flatCube) {
-  console.log(flatCube)
-  var flatCubeKeys = Object.keys(flatCube)
-  // for (var i = 0; i < flatCubeKeys.length; i++) {
-  //   for (var j = 0; j < flatCubeKeys.length; j++) {
-  //     //console.log(flatCube[flatCubeKeys[i]] + ', ' + flatCube[flatCubeKeys[j]])
-  //     write3d(flatCube[flatCubeKeys[i]], flatCube[flatCubeKeys[j]])
-  //   }
-  // }
-  write3d(flatCube.ntl, flatCube.ntr)
-  write3d(flatCube.nbl, flatCube.nbr)
-  write3d(flatCube.ntl, flatCube.nbl)
-  write3d(flatCube.ntr, flatCube.nbr)
+  // console.log(flatCube)
 
-  write3d(flatCube.ftl, flatCube.ftr)
-  write3d(flatCube.fbl, flatCube.fbr)
-  write3d(flatCube.ftl, flatCube.fbl)
-  write3d(flatCube.ftr, flatCube.fbr)
+  var pairs = [
+    [flatCube.ntl, flatCube.ntr],
+    [flatCube.nbl, flatCube.nbr],
+    [flatCube.ntl, flatCube.nbl],
+    [flatCube.ntr, flatCube.nbr],
 
-  write3d(flatCube.ntl, flatCube.ftl)
-  write3d(flatCube.ntr, flatCube.ftr)
-  write3d(flatCube.nbl, flatCube.fbl)
-  write3d(flatCube.nbr, flatCube.fbr)
+    [flatCube.ftl, flatCube.ftr],
+    [flatCube.fbl, flatCube.fbr],
+    [flatCube.ftl, flatCube.fbl],
+    [flatCube.ftr, flatCube.fbr],
+
+    [flatCube.ntl, flatCube.ftl],
+    [flatCube.ntr, flatCube.ftr],
+    [flatCube.nbl, flatCube.fbl],
+    [flatCube.nbr, flatCube.fbr]
+  ]
+
+  for (var i = 0; i < pairs.length; i++) {
+    if (pairs[i][0] && pairs[i][1]) {
+      write(pairs[i][0], pairs[i][1])
+    }
+  }
 }
-
-writeFlatCube(flatCube)
+// writeFlatCube(flatCube)
 
 var flatSquareish = mapPointsToPlane(squareish)
 // writeFlatCube(flatSquareish)
@@ -178,14 +215,75 @@ function zoomOut () {
     myLocation[2] = stillGoing + 2
     stillGoing -= 10
     ctx2.beginPath()
-    writeFlatCube(mapPointsToPlane(cube))
-    writeFlatCube(mapPointsToPlane(transformPoints(mess, cube)))
+    // writeFlatCube(mapPointsToPlane(cube))
+    writeFlatCube(mapPointsToPlane(rotatedCube))
+    // writeFlatCube(mapPointsToPlane(transformPoints(mess, cube)))
     ctx2.closePath()
     setTimeout(zoomOut, 10)
   }
 }
 
-zoomOut()
+// zoomOut()
+function writeFlattenedArray (arr) {
+  for (var i = 0; i < arr.length; i++) {
+    for (var j = 0; j < arr.length; j++) {
+      write(arr[i], arr[j])
+    }
+  }
+}
+
+function render (array) {
+  ctx2.clearRect(0, 0, 600, 600)
+  ctx2.beginPath()
+  writeFlattenedArray(mapPointsArrToPlane(array))
+  ctx2.fillStyle = '#8ED6FF'
+  ctx2.fill()
+  ctx2.strokeStyle = 'blue'
+  ctx2.stroke()
+  ctx2.closePath()
+}
+
+var cubeArray = []
+var cubeKeys = Object.keys(cube)
+for (var i = 0; i < cubeKeys.length; i++) {
+  cubeArray.push(cube[cubeKeys[i]])
+}
+console.log(cubeArray)
+
+var stillGoing = 2000.0
+var viewPos = 20000.0
+function spin () {
+  if (stillGoing > 0) {
+    var angle = stillGoing % 360.0
+    windowLocation[2] = viewPos
+    myLocation[2] = viewPos + 2
+    var xRotatedCube = rotateObject(cubeArray, 'x', angle)
+    var xyRotatedCube = rotateObject(xRotatedCube, 'y', angle)
+    var xyzRotatedCube = rotateObject(xyRotatedCube, 'z', angle)
+    render(xyzRotatedCube)
+
+    if (viewPos >= 50) {
+      if (viewPos < 150) {
+        viewPos -= 0.2
+        stillGoing -= 0.005
+      } else if (viewPos < 500) {
+        viewPos -= 1
+        stillGoing -= 0.03
+      } else if (viewPos < 2000) {
+        viewPos -= 10
+        stillGoing -= 0.1
+      } else {
+        viewPos -= 120
+        stillGoing -= 0.2
+      }
+    }
+  }
+  setTimeout(spin, 30)
+}
+
+spin()
+// render(cubeArray)
+
 // let's start by finding how far each point is from me
 // var cubeKeys = Object.keys(cube);
 

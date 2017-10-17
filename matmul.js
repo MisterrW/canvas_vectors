@@ -48,6 +48,21 @@ function matMul (A, B) {
   return R
 }
 
+// hack, sort me out
+function vectMatMul (matrix, vector) {
+  var i
+  var wrappedV = []
+  for (i = 0; i < vector.length; i++) {
+    wrappedV.push([vector[i]])
+  }
+  var wrappedResult = matMul(matrix, wrappedV)
+  var result = []
+  for (i = 0; i < wrappedResult.length; i++) {
+    result.push(wrappedResult[i][0])
+  }
+  return result
+}
+
 // returns a matrix to a given (>=0) power
 function pwrMat (mat, pwr) {
   if (pwr < 0) {
