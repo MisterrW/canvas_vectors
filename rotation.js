@@ -1,31 +1,34 @@
-/* globals vectMatMul */
+/* globals matMul vectMatMul */
 /**
 * Provides rotation matrices for euclidean axes. Call with rotMatrixGen[axis](angle)
 */
 var rotMatrixGen = {
   x: function getXRotMatrix (a) {
-    var m = Math
+    var cosA = Math.cos(a)
+    var sinA = Math.sin(a)
     return [
       [1, 0, 0],
-      [0, m.cos(a), -m.sin(a)],
-      [0, m.sin(a), m.cos(a)]
+      [0, cosA, -sinA],
+      [0, sinA, cosA]
     ]
   },
 
   y: function getYRotMatrix (a) {
-    var m = Math
+    var cosA = Math.cos(a)
+    var sinA = Math.sin(a)
     return [
-      [m.cos(a), 0, m.sin(a)],
+      [cosA, 0, sinA],
       [0, 1, 0],
-      [-m.sin(a), 0, m.cos(a)]
+      [-sinA, 0, cosA]
     ]
   },
 
   z: function getZRotMatrix (a) {
-    var m = Math
+    var cosA = Math.cos(a)
+    var sinA = Math.sin(a)
     return [
-      [m.cos(a), -m.sin(a), 0],
-      [m.sin(a), m.cos(a), 0],
+      [cosA, -sinA, 0],
+      [sinA, cosA, 0],
       [0, 0, 1]
     ]
   }
@@ -39,8 +42,10 @@ var rotateVector = function rotateVector (vector, axis, angle) {
 }
 
 /**
-* Transforms an array of points by a rotation, ie rotates an object
+* Transforms an array of points by a rotation, ie rotates an object, in a single axis
 */
+
+var pointRotateCount2 = 0
 var rotateObject = function rotateObject (object, axis, angle) {
   var rotMatrix = rotMatrixGen[axis](angle)
   // console.log(object)
@@ -48,6 +53,30 @@ var rotateObject = function rotateObject (object, axis, angle) {
   var rotated = []
   for (var i = 0; i < object.length; i++) {
     // console.log(object[i])
+    pointRotateCount2 += 1
+    if (pointRotateCount2 % 1000 === 0) {
+      console.log(pointRotateCount2)
+    }
+    rotated.push(vectMatMul(rotMatrix, object[i]))
+  }
+  return rotated
+}
+
+var pointRotateCount = 0
+var rotateObjectAllAxes = function rotateObjectAllAxes (object, xAng, yAng, zAng) {
+  var xRotMat = rotMatrixGen['x'](xAng)
+  var yRotMat = rotMatrixGen['y'](yAng)
+  var zRotMat = rotMatrixGen['z'](zAng)
+
+  var rotMatrix = matMul(zRotMat, matMul(yRotMat, xRotMat))
+
+  var rotated = []
+  for (var i = 0; i < object.length; i++) {
+    // console.log(object[i])
+    pointRotateCount += 1
+    if (pointRotateCount % 1000 === 0) {
+      console.log(pointRotateCount)
+    }
     rotated.push(vectMatMul(rotMatrix, object[i]))
   }
   return rotated

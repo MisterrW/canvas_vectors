@@ -155,7 +155,6 @@ function write (endVector, startVector) {
   ctx2.lineTo(scaledStart[0], scaledStart[1])
   ctx2.lineTo(scaledEnd[0], scaledEnd[1])
 
-
   ctx2.stroke()
 }
 function writeFlatCube (flatCube) {
@@ -236,9 +235,7 @@ function render (array) {
   ctx2.clearRect(0, 0, 600, 600)
   ctx2.beginPath()
   writeFlattenedArray(mapPointsArrToPlane(array))
-  ctx2.fillStyle = '#8ED6FF'
-  ctx2.fill()
-  ctx2.strokeStyle = 'blue'
+  ctx2.strokeStyle = '#ff0099'
   ctx2.stroke()
   ctx2.closePath()
 }
@@ -251,15 +248,20 @@ for (var i = 0; i < cubeKeys.length; i++) {
 console.log(cubeArray)
 
 var stillGoing = 2000.0
-var viewPos = 20000.0
+var viewPos = 5000.0
 function spin () {
   if (stillGoing > 0) {
     var angle = stillGoing % 360.0
     windowLocation[2] = viewPos
     myLocation[2] = viewPos + 2
-    var xRotatedCube = rotateObject(cubeArray, 'x', angle)
-    var xyRotatedCube = rotateObject(xRotatedCube, 'y', angle)
-    var xyzRotatedCube = rotateObject(xyRotatedCube, 'z', angle)
+
+    // we can make this better. instead of doing these in sequence, if we did it in one go we could multiply the matrices once (1 op) and then do the vector mult just once for each point (8 ops) instead of the 24 needed here
+
+    // var xRotatedCube = rotateObject(cubeArray, 'x', angle)
+    // var xyRotatedCube = rotateObject(xRotatedCube, 'y', angle)
+    // var xyzRotatedCube = rotateObject(xyRotatedCube, 'z', angle)
+    //
+    var xyzRotatedCube = rotateObjectAllAxes(cubeArray, angle, angle, angle)
     render(xyzRotatedCube)
 
     if (viewPos >= 50) {
@@ -267,18 +269,18 @@ function spin () {
         viewPos -= 0.2
         stillGoing -= 0.005
       } else if (viewPos < 500) {
-        viewPos -= 1
+        viewPos -= 2
         stillGoing -= 0.03
       } else if (viewPos < 2000) {
-        viewPos -= 10
-        stillGoing -= 0.1
+        viewPos -= 1
+        stillGoing -= 0.01
       } else {
-        viewPos -= 120
-        stillGoing -= 0.2
+        viewPos -= 12
+        stillGoing -= 0.02
       }
     }
   }
-  setTimeout(spin, 30)
+  setTimeout(spin, 1)
 }
 
 spin()
