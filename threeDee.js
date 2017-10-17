@@ -146,6 +146,8 @@ function scaleVector2 (vector) {
   return result
 }
 
+ctx2.strokeStyle = '#ff0099'
+
 function write (endVector, startVector) {
   // console.log('hello')
   // console.log(startVector + '. ' + endVector)
@@ -235,8 +237,6 @@ function render (array) {
   ctx2.clearRect(0, 0, 600, 600)
   ctx2.beginPath()
   writeFlattenedArray(mapPointsArrToPlane(array))
-  ctx2.strokeStyle = '#ff0099'
-  ctx2.stroke()
   ctx2.closePath()
 }
 

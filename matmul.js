@@ -36,31 +36,34 @@ function matMul (A, B) {
     for (i = 0; i < B[0].length; i++) {
       // R[j][i] = [];
       // total = 0
-      var total = 0
+      R[j][i] = 0
       // for each element l in that row of A
       for (k = 0; k < B.length; k++) {
         // add to the total for the position being evaluated the value of the position k in the COLUMN of B multiplied by the value of that same position k in the ROW of A
-        total += (A[j][k] * B[k][i])
+        R[j][i] += (A[j][k] * B[k][i])
       }
-      R[j][i] = total
     }
   }
   return R
 }
 
-// hack, sort me out
-function vectMatMul (matrix, vector) {
-  var i
-  var wrappedV = []
-  for (i = 0; i < vector.length; i++) {
-    wrappedV.push([vector[i]])
+function vectMatMul (M, V) {
+  var j, k
+  var R = []
+  if (M[0].length !== V.length) {
+    console.log("Hell, I can't multiply these things!")
+    console.log(M)
+    console.log(V)
+    return
   }
-  var wrappedResult = matMul(matrix, wrappedV)
-  var result = []
-  for (i = 0; i < wrappedResult.length; i++) {
-    result.push(wrappedResult[i][0])
+
+  for (j = 0; j < M.length; j++) {
+    R[j] = 0
+    for (k = 0; k < V.length; k++) {
+      R[j] += (M[j][k] * V[k])
+    }
   }
-  return result
+  return R
 }
 
 // returns a matrix to a given (>=0) power

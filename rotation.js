@@ -41,11 +41,11 @@ var rotateVector = function rotateVector (vector, axis, angle) {
   return vectMatMul(rotMatrixGen[axis](angle), vector)
 }
 
+// var pointRotateCount2 = 0
+// var pointRotateCount = 0
 /**
 * Transforms an array of points by a rotation, ie rotates an object, in a single axis
 */
-
-var pointRotateCount2 = 0
 var rotateObject = function rotateObject (object, axis, angle) {
   var rotMatrix = rotMatrixGen[axis](angle)
   // console.log(object)
@@ -53,16 +53,18 @@ var rotateObject = function rotateObject (object, axis, angle) {
   var rotated = []
   for (var i = 0; i < object.length; i++) {
     // console.log(object[i])
-    pointRotateCount2 += 1
-    if (pointRotateCount2 % 1000 === 0) {
-      console.log(pointRotateCount2)
-    }
+    // pointRotateCount2 += 1
+    // if (pointRotateCount2 % 1000 === 0) {
+    //   console.log(pointRotateCount2)
+    // }
     rotated.push(vectMatMul(rotMatrix, object[i]))
   }
   return rotated
 }
 
-var pointRotateCount = 0
+/**
+* If we're rotating all 3 axes, multiply the three rotation axes to save repeating for each axis
+*/
 var rotateObjectAllAxes = function rotateObjectAllAxes (object, xAng, yAng, zAng) {
   var xRotMat = rotMatrixGen['x'](xAng)
   var yRotMat = rotMatrixGen['y'](yAng)
@@ -73,10 +75,10 @@ var rotateObjectAllAxes = function rotateObjectAllAxes (object, xAng, yAng, zAng
   var rotated = []
   for (var i = 0; i < object.length; i++) {
     // console.log(object[i])
-    pointRotateCount += 1
-    if (pointRotateCount % 1000 === 0) {
-      console.log(pointRotateCount)
-    }
+    // pointRotateCount += 1
+    // if (pointRotateCount % 1000 === 0) {
+    //   console.log(pointRotateCount)
+    // }
     rotated.push(vectMatMul(rotMatrix, object[i]))
   }
   return rotated
