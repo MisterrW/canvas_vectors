@@ -42,7 +42,7 @@ var rotateVector = function rotateVector (vector, axis, angle) {
 }
 
 // var pointRotateCount2 = 0
-// var pointRotateCount = 0
+var pointRotateCount = 0
 /**
 * Transforms an array of points by a rotation, ie rotates an object, in a single axis
 */
@@ -74,11 +74,10 @@ var rotateObjectAllAxes = function rotateObjectAllAxes (object, xAng, yAng, zAng
 
   var rotated = []
   for (var i = 0; i < object.length; i++) {
-    // console.log(object[i])
-    // pointRotateCount += 1
-    // if (pointRotateCount % 1000 === 0) {
-    //   console.log(pointRotateCount)
-    // }
+    pointRotateCount += 1
+    if (pointRotateCount % 1000 === 0) {
+      console.log(pointRotateCount)
+    }
     rotated.push(vectMatMul(rotMatrix, object[i]))
   }
   return rotated

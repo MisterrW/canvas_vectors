@@ -18,6 +18,18 @@ function identity (mat) {
   return I
 }
 
+// subracts vb frm va, if they are of the same dimensions
+function vectSubtract (va, vb) {
+  if (va.length !== vb.length) {
+    console.log("vector length mismatch, can't subtract")
+  }
+  var R = []
+  for (var i = 0; i < va.length; i++) {
+    R[i] = vb[i] - va[i]
+  }
+  return R
+}
+
 // multiplies two matrices, or a matrix A by a vector B
 
 function matMul (A, B) {
