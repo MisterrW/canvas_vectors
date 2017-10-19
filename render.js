@@ -24,8 +24,6 @@ function preRender () {
 }
 
 function writeFlattenedArray (arr) {
-  console.log("flat array to write:")
-  console.log(arr)
   for (var i = 0; i < arr.length; i++) {
     for (var j = 0; j < arr.length; j++) {
       if (arr[i] !== 'NORENDER' && arr[j] !== 'NORENDER') {

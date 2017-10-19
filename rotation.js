@@ -74,10 +74,10 @@ var rotateObjectAllAxes = function rotateObjectAllAxes (object, xAng, yAng, zAng
 
   var rotated = []
   for (var i = 0; i < object.length; i++) {
-    pointRotateCount += 1
-    if (pointRotateCount % 1000 === 0) {
-      console.log(pointRotateCount)
-    }
+    // pointRotateCount += 1
+    // if (pointRotateCount % 1000 === 0) {
+    //   console.log(pointRotateCount)
+    // }
     rotated.push(vectMatMul(rotMatrix, object[i]))
   }
   return rotated

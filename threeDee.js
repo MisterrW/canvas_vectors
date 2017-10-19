@@ -121,9 +121,6 @@ function spin () {
   if (stillGoing > 0) {
     var objectsThisFrame = []
     var angle = stillGoing % 360.0
-    // cameraLocation[2] = viewPos
-    // myLocation[2] = viewPos + 2
-
     objectsThisFrame.push(rotateObjectAllAxes(cubeArray, angle, angle, angle))
     objectsThisFrame.push(alter1(cubeArray, angle))
     objectsThisFrame.push(alter2(cubeArray, angle))

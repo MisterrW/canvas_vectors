@@ -17,11 +17,5 @@ function cameraOrientPointsArray (pointsArray) {
   for (var i = 0; i < pointsArray.length; i++) {
     pointsToRotate[i] = vectSubtract(pointsArray[i], cameraLocation)
   }
-  console.log('subtracted cameraOrientation')
-  console.log(pointsToRotate)
-  var oriented = rotateObjectAllAxes(pointsToRotate, cameraOrientation[0], cameraOrientation[1], cameraOrientation[2])
-  // return rotateObjectAllAxes(pointsArray, cameraOrientation[0], cameraOrientation[1], cameraOrientation[2])
-  console.log('transformed to account for camera orientation:')
-  console.log(oriented)
-  return oriented
+  return rotateObjectAllAxes(pointsToRotate, cameraOrientation[0], cameraOrientation[1], cameraOrientation[2])
 }
