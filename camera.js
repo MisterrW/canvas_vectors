@@ -3,10 +3,10 @@
 // somewhere to look from
 var cameraLocation =
   // [x, y, z]
-    [700.0, 300.0, 400.0]
+    [0.0, 0.0, 100.0]
 
 // Tait-Bryan rotation (degrees of rotation around x, y, z)
-var cameraOrientation = [19.5, -0.9, -0.5]
+var cameraOrientation = [19.5, -0.9, 0]
 
 // rework this once camera orientation used
 // var myLocation = cameraLocation

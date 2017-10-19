@@ -136,7 +136,7 @@ function spin () {
     if (viewPos >= -200) {
       // cameraOrientation[0] = 0.3 // - down
       // cameraOrientation[1] += 0.003 //- right
-      //cameraOrientation[2] += 0.008
+      // cameraOrientation[2] += 0.008
       if (viewPos < 30) {
         viewPos -= 0.02
         stillGoing -= 0.002
