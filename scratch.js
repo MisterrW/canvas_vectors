@@ -1,3 +1,5 @@
+/*
+
 function writeFlatCube (flatCube) {
   // console.log(flatCube)
 
@@ -60,3 +62,21 @@ var squareish = {
   bl: [-4.0, -4.0, -4.0],
   br: [4.0, -4.0, 4.0]
 }
+
+console.log(cube)
+// writeFlatCube(mapPointsToPlane(transformPoints(mess, cube)))
+
+var stillGoing = 2000
+function zoomOut () {
+  if (stillGoing > -1000) {
+    ctx2.clearRect(0, 0, 600, 600)
+    camera.location[2] = stillGoing
+    stillGoing -= 10
+    preRender()
+    writeFlatCube(mapPointsToPlane(rotatedCube))
+    render()
+    setTimeout(zoomOut, 10)
+  }
+}
+
+*/

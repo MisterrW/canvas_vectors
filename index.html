@@ -8,14 +8,17 @@
 
 </head>
 <body>
-  <canvas onmousedown=mouseDown() onmouseup=mouseUp() onmousemove="mouseMove(event)" id="my3dCanvas" width="600" height="600" style="border:1px solid #000000;"></canvas>
+  <canvas onmousedown=mouseDown() onmouseup=mouseUp() onmousemove="setMousePosition(event)" id="my3dCanvas" width="600" height="600" style="border:1px solid #000000;"></canvas>
   <canvas id="myCanvas" width="600" height="600" style="border:1px solid #000000;"></canvas>
 </body>
-<script src="movement.js"></script>
-<script src="matmul.js"></script>
+<script src="mouseMovement.js"></script>
+<script src="keyMovement.js"></script>
+<script src="matrixOperations.js"></script>
 <script src="vectors.js"></script>
 <script src="rotation.js"></script>
-<script src="render.js"></script>
+<script src="renderer.js"></script>
+<script src="projector.js"></script>
 <script src="camera.js"></script>
-<script src="threeDee.js"></script>
+<script src="gameState.js"></script>
+<script src="main.js"></script>
 </html>

@@ -1,4 +1,5 @@
-/* globals matMul */
+/* globals MatrixOperations */
+var matrixOps = new MatrixOperations()
 
 var twoDimIdentity = [
   [1, 0],
@@ -80,17 +81,17 @@ function printSquare (tl, bl, tr, br) {
 printSquare(sqr.tl, sqr.bl, sqr.tr, sqr.br)
 
 var smlSqr = {
-  tl: vectMatMul(shrinker, sqr.tl),
-  tr: vectMatMul(shrinker, sqr.tr),
-  bl: vectMatMul(shrinker, sqr.bl),
-  br: vectMatMul(shrinker, sqr.br)
+  tl: matrixOps.vectMatMul(shrinker, sqr.tl),
+  tr: matrixOps.vectMatMul(shrinker, sqr.tr),
+  bl: matrixOps.vectMatMul(shrinker, sqr.bl),
+  br: matrixOps.vectMatMul(shrinker, sqr.br)
 }
 
 var slntSqr = {
-  tl: vectMatMul(slanter, sqr.tl),
-  tr: vectMatMul(slanter, sqr.tr),
-  bl: vectMatMul(slanter, sqr.bl),
-  br: vectMatMul(slanter, sqr.br)
+  tl: matrixOps.vectMatMul(slanter, sqr.tl),
+  tr: matrixOps.vectMatMul(slanter, sqr.tr),
+  bl: matrixOps.vectMatMul(slanter, sqr.bl),
+  br: matrixOps.vectMatMul(slanter, sqr.br)
 }
 
 printSquare(sqr.tl, sqr.bl, sqr.tr, sqr.br)

@@ -1,21 +1,20 @@
-/* globals vectSubtract rotateObjectAllAxes */
+var Camera = function (matrixOps, rotation) {
+  this.matrixOps = matrixOps
+  this.rotation = rotation
+  this.location =
+    // [x, y, z]
+      [0.0, 0.0, 100.0]
 
-// somewhere to look from
-var cameraLocation =
-  // [x, y, z]
-    [0.0, 0.0, 100.0]
+  // Tait-Bryan rotation (degrees of rotation around x, y, z)
+  this.orientation = [19.5, -0.9, 0]
+}
 
-// Tait-Bryan rotation (degrees of rotation around x, y, z)
-var cameraOrientation = [19.5, -0.9, 0]
-
-// rework this once camera orientation used
-// var myLocation = cameraLocation
-// myLocation[2] += 5
-
-function cameraOrientPointsArray (pointsArray) {
-  var pointsToRotate = []
-  for (var i = 0; i < pointsArray.length; i++) {
-    pointsToRotate[i] = vectSubtract(pointsArray[i], cameraLocation)
+Camera.prototype = {
+  orientPointsArray: function orientPointsArray (pointsArray) {
+    var pointsToRotate = []
+    for (var i = 0; i < pointsArray.length; i++) {
+      pointsToRotate[i] = this.matrixOps.vectSubtract(pointsArray[i], this.location)
+    }
+    return this.rotation.rotateObjectAllAxes(pointsToRotate, this.orientation[0], this.orientation[1], this.orientation[2])
   }
-  return rotateObjectAllAxes(pointsToRotate, cameraOrientation[0], cameraOrientation[1], cameraOrientation[2])
 }
