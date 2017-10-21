@@ -23,6 +23,17 @@ MatrixOperations.prototype = {
     return I
   },
 
+  vectAdd: function vectAdd (va, vb) {
+    if (va.length !== vb.length) {
+      console.log("vector length mismatch, can't add")
+    }
+    var R = []
+    for (var i = 0; i < va.length; i++) {
+      R[i] = vb[i] + va[i]
+    }
+    return R
+  },
+
   // subracts vector vb frm vector va, if they are of the same dimensions
   vectSubtract: function vectSubtract (va, vb) {
     if (va.length !== vb.length) {

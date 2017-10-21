@@ -7,10 +7,8 @@ var mousePosition
 var mouseIsDown = false
 // event handler called when mouse over viewport
 var setMousePosition = function (event) {
-  if (this.mouseIsDown) {
-    // mouse controls camera orientation
-    mousePosition = [event.clientX, event.clientY]
-  }
+  // mouse controls camera orientation
+  mousePosition = [event.clientX, event.clientY]
 }
 var mouseDown = function () {
   mouseIsDown = true

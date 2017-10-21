@@ -1,8 +1,11 @@
 /**
-* Provides rotation matrices for euclidean axes. Call with rotMatrixGen[axis](angle)
+* Vector and point array rotation operations
 */
 var Rotation = function Rotation (matrixOps) {
   this.matrixOps = matrixOps
+  /**
+  * Provides rotation matrices for euclidean axes. Call with this.rotMatrixGen[axis](angle)
+  */
   this.rotMatrixGen = {
     x: function getXRotMatrix (a) {
       var cosA = Math.cos(a)
@@ -39,12 +42,33 @@ var Rotation = function Rotation (matrixOps) {
   this.pointRotateCount = 0
 }
 
-/**
-* Rotates a vector around a given axis by a given angle.
-*/
 Rotation.prototype = {
+  /**
+  * If we're rotating all 3 axes, multiply the three rotation axes to save repeating for each axis
+  */
+  getXYZRotMat: function getXYZRotMat (xAng, yAng, zAng) {
+    var xRotMat = this.rotMatrixGen['x'](xAng)
+    var yRotMat = this.rotMatrixGen['y'](yAng)
+    var zRotMat = this.rotMatrixGen['z'](zAng)
+
+    return this.matrixOps.matMul(zRotMat, this.matrixOps.matMul(yRotMat, xRotMat))
+  },
+
+  /**
+  * Rotates a vector around a given axis by a given angle.
+  */
   rotateVector: function rotateVector (vector, axis, angle) {
     return this.matrixOps.vectMatMul(this.rotMatrixGen[axis](angle), vector)
+  },
+
+  rotateVectorAllAxes: function rotateVectorAllAxes (vect, xAng, yAng, zAng) {
+    var rotMatrix = this.getXYZRotMat(xAng, yAng, zAng)
+    return this.matrixOps.vectMatMul(rotMatrix, vect)
+  },
+
+  inverseRotateVectorAllAxes: function rotateVectorAllAxes (vect, xAng, yAng, zAng) {
+    // var rotMatrix = this.matrixOps.invert(this.getXYZRotMat(xAng, yAng, zAng))
+    // return this.matrixOps.vectMatMul(rotMatrix, vect)
   },
 
   /**
@@ -52,36 +76,21 @@ Rotation.prototype = {
   */
   rotateObject: function rotateObject (object, axis, angle) {
     var rotMatrix = this.rotMatrixGen[axis](angle)
-    // console.log(object)
-    // console.log(rotMatrix)
     var rotated = []
     for (var i = 0; i < object.length; i++) {
-    // console.log(object[i])
-    // this.pointRotateCount2 += 1
-    // if (this.pointRotateCount2 % 1000 === 0) {
-    //   console.log(this.pointRotateCount2)
-    // }
       rotated.push(this.matrixOps.vectMatMul(rotMatrix, object[i]))
     }
     return rotated
   },
 
-  /**
-  * If we're rotating all 3 axes, multiply the three rotation axes to save repeating for each axis
-  */
   rotateObjectAllAxes: function rotateObjectAllAxes (object, xAng, yAng, zAng) {
-    var xRotMat = this.rotMatrixGen['x'](xAng)
-    var yRotMat = this.rotMatrixGen['y'](yAng)
-    var zRotMat = this.rotMatrixGen['z'](zAng)
-
-    var rotMatrix = this.matrixOps.matMul(zRotMat, this.matrixOps.matMul(yRotMat, xRotMat))
-
+    var rotMatrix = this.getXYZRotMat(xAng, yAng, zAng)
     var rotated = []
     for (var i = 0; i < object.length; i++) {
-      this.pointRotateCount += 1
-      if (this.pointRotateCount % 1000 === 0) {
-        console.log(this.pointRotateCount)
-      }
+      // this.pointRotateCount += 1
+      // if (this.pointRotateCount % 1000 === 0) {
+      //   console.log(this.pointRotateCount)
+      // }
       rotated.push(this.matrixOps.vectMatMul(rotMatrix, object[i]))
     }
     return rotated

@@ -6,7 +6,7 @@ var Camera = function (matrixOps, rotation) {
       [0.0, 0.0, 100.0]
 
   // Tait-Bryan rotation (degrees of rotation around x, y, z)
-  this.orientation = [19.5, -0.9, 0]
+  this.orientation = [0, 0, 0]
 }
 
 Camera.prototype = {
@@ -16,5 +16,19 @@ Camera.prototype = {
       pointsToRotate[i] = this.matrixOps.vectSubtract(pointsArray[i], this.location)
     }
     return this.rotation.rotateObjectAllAxes(pointsToRotate, this.orientation[0], this.orientation[1], this.orientation[2])
+  },
+
+  /**
+  * Moves the camera, transforming the given vector (representing movement in a coordinate system with the camera not rotated)
+  * into a vector in the actual coordinate system, and adding that to the current location.
+  */
+  move: function move (vector) {
+    // if camera was at 0,0,0 , moving forward would take us to 0,0,2.
+    // but we're probably not at 0,0,0
+    // but we can get the result of that as it applies to our current location by rotating our 0,0,2 by the camera's orientation and adding the result of that to the camera's current actual location
+    // probably need inverse
+    var transformedVector = this.rotation.rotateVectorAllAxes(vector, this.orientation[0], this.orientation[1], this.orientation[2])
+    // console.log("vector: " + vector + ", transformed vector: " + transformedVector)
+    this.location = this.matrixOps.vectAdd(this.location, transformedVector)
   }
 }
