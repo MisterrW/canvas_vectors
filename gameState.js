@@ -28,6 +28,14 @@ var GameState = function GameState (rotation, renderer, projector, camera) {
     [200.0, -200.0, -200.0]
   ]
 
+  this.wall = [
+
+  ]
+
+  for (var i = -10000; i < 10000; i += 100) {
+    this.wall.push([[500, 1000, i - 100], [500, -1000, i]])
+  }
+
   this.cubeArray = []
   this.cubeKeys = Object.keys(this.cube)
   for (var i = 0; i < this.cubeKeys.length; i++) {
@@ -68,6 +76,9 @@ GameState.prototype = {
     objectsThisFrame.push(this.alter1(this.cubeArray, angle))
     objectsThisFrame.push(this.alter2(this.cubeArray, angle))
     objectsThisFrame.push(this.floor)
+    for (var i = 0; i < this.wall.length; i++) {
+      objectsThisFrame.push(this.wall[i])
+    }
 
     this.renderer.preRender()
     for (var i = 0; i < objectsThisFrame.length; i++) {

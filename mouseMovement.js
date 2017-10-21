@@ -12,8 +12,13 @@ MouseMovement.prototype = {
       this.lastLocation = null
       return
     }
-    if (!location) { return }
-    if (!this.lastLocation) { this.lastLocation = location }
+    if (!location || (location && this.lastLocation && this.lastLocation === location)) {
+      return
+    }
+    if (!this.lastLocation) {
+      this.lastLocation = location
+      return
+    }
 
     var diff = [
       location[0] - this.lastLocation[0],
@@ -28,6 +33,15 @@ MouseMovement.prototype = {
     if (!isNaN(diff[1])) {
       this.camera.orientation[0] += (-diff[1] / 500)
     }
+
+    // prevent rolling (stay upright, FPS style) by preventing x orientation going past (roughl) stright up or straight down (+||- 1/2 pi)
+    if (this.camera.orientation[0] > 1.57) {
+      this.camera.orientation[0] = 1.57
+    } else if (this.camera.orientation[0] < -1.57) {
+      this.camera.orientation[0] = -1.57
+    }
+    this.camera.orientation[2] = 0
     this.lastLocation = location
+    console.log(this.camera.orientation)
   }
 }

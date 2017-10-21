@@ -24,9 +24,9 @@ KeyMovement.prototype = {
     }
     // up/down (x c)
     if (activeKeys[88]) {
-      moveVect[1] = -5
-    } else if (activeKeys[67]) {
       moveVect[1] = 5
+    } else if (activeKeys[67]) {
+      moveVect[1] = -5
     }
     if (moveVect[0] !== 0 || moveVect[1] !== 0 || moveVect[2] !== 0) { this.camera.move(moveVect) }
   }
