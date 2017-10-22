@@ -112,7 +112,8 @@ GameState.prototype = {
     return this.rotation.rotateObjectAllAxes(newObj, angle + 9, angle + 10, angle + 15)
   },
 
-  alter3: function alter2 (object, angle) {
+  alter3: function alter3 (object, angle) {
+    var centre = [400, 400, 400]
     var newObj = []
     for (var i = 0; i < object.length; i++) {
       newObj[i] = []
@@ -120,7 +121,7 @@ GameState.prototype = {
         newObj[i][j] = object[i][j] + 400
       }
     }
-    return this.rotation.intrinsicRotateObjectAllAxes(newObj, angle + 9, angle + 10, angle + 15)
+    return this.rotation.translateAllPointsRotateAndTranslateBack(newObj, centre, angle + 9, angle + 10, angle + 15)
   },
 
   spin: function spin () {

@@ -130,7 +130,7 @@ Rotation.prototype = {
       rotated.push(this.matrixOps.vectMatMul(rotMatrix, object[i]))
     }
     return rotated
-  }, 
+  },
   intrinsicInverseRotateObjectAllAxes: function inverseRotateObjectAllAxes (object, xAng, yAng, zAng) {
     var rotMatrix = this.matrixOps.invert(this.getXYZRotMat(zAng, yAng, xAng))
     var rotated = []
@@ -142,5 +142,18 @@ Rotation.prototype = {
       rotated.push(this.matrixOps.vectMatMul(rotMatrix, object[i]))
     }
     return rotated
+  },
+  translateAllPointsRotateAndTranslateBack: function translateAllPointsRotateAndTranslateBack (pointsArray, displacementVector, xAng, yAng, zAng) {
+    var pointsToRotate = []
+    var i
+    for (i = 0; i < pointsArray.length; i++) {
+      pointsToRotate[i] = this.matrixOps.vectSubtract(pointsArray[i], displacementVector)
+    }
+    var rotatedArray = this.rotateObjectAllAxes(pointsToRotate, xAng, yAng, zAng)
+    var returnArray = []
+    for (i = 0; i < pointsArray.length; i++) {
+      returnArray[i] = this.matrixOps.vectAdd(rotatedArray[i], displacementVector)
+    }
+    return returnArray
   }
 }

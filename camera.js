@@ -20,17 +20,39 @@ Camera.prototype = {
     for (var i = 0; i < pointsArray.length; i++) {
       pointsToRotate[i] = this.matrixOps.vectSubtract(pointsArray[i], this.location)
     }
-    return this.rotation.intrinsicInverseRotateObjectAllAxes(pointsToRotate, this.orientation[0], this.orientation[1], this.orientation[2])
+    var rotatedPoints = this.rotation.rotateObjectAllAxes(pointsToRotate, this.orientation[0], this.orientation[1], this.orientation[2])
+    // var returnPoints = []
+    // for (var i = 0; i < rotatedPoints.length; i++) {
+    //   returnPoints[i] = this.matrixOps.vectAdd(pointsArray[i], this.location)
+    // }
+    // return returnPoints
+    return rotatedPoints
   },
 
   /**
    * Reorients the camera ,given a vector representing the change in its positon
-   * (according to a coorinate system defined by the camera itself)
+   * (according to a coordinate system defined by the camera itself)
    */
   reorient: function reorient (vector) {
-    //var transformedVector = this.rotation.rotateVectorAllAxes(vector, -this.orientation[0], -this.orientation[1], -this.orientation[2])
-    //var transformedVector = this.rotation.intrinsicInverseRotateVectorAllAxes(vector, -this.orientation[0], -this.orientation[1], -this.orientation[2])
-    this.orientation = this.matrixOps.vectAdd(this.orientation, vector)
+    // do roll, we know this works
+    this.orientation[2] += vector[2]
+
+    // then rotate remaining vector by new orientation
+    vector[2] = 0
+    this.orientation = this.matrixOps.vectAdd(this.orientation, this.rotation.inverseRotateVectorAllAxes(vector, this.orientation[0], this.orientation[1], this.orientation[2]))
+
+    //
+    // var pointsToRotate = []
+    // var i
+    // for (i = 0; i < pointsArray.length; i++) {
+    //   pointsToRotate[i] = this.matrixOps.vectSubtract(pointsArray[i], displacementVector)
+    // }
+    // var rotatedArray = this.rotateObjectAllAxes(pointsToRotate, xAng, yAng, zAng)
+    // var returnArray = []
+    // for (i = 0; i < pointsArray.length; i++) {
+    //   returnArray[i] = this.matrixOps.vectAdd(rotatedArray[i], displacementVector)
+    // }
+    // return returnArray
   },
 
   /**
@@ -57,7 +79,7 @@ Camera.prototype = {
     //   [4.45, 7.25, 6.11],
     //   [8.435, 2.523, 4.2]
     // ])
-    //console.log('orientation 1: ' + this.orientation)
+    // console.log('orientation 1: ' + this.orientation)
     // var transformedVector = this.rotation.rotateVectorAllAxes(vector, this.orientation[0], this.orientation[1], 0)
     // var transformedVector = this.rotation.rotateVectorAllAxes(vector, -this.orientation[0], -this.orientation[1], -this.orientation[2])
     var transformedVector = this.rotation.inverseRotateVectorAllAxes(vector, this.orientation[0], this.orientation[1], this.orientation[2])
