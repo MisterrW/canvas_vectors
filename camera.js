@@ -3,7 +3,7 @@ var Camera = function (matrixOps, rotation) {
   this.rotation = rotation
   this.location =
     // [x, y, z]
-      [0.0, 20.0, 1000.0]
+      [0.0, 20.0, 4000.0]
 
   // Tait-Bryan rotation (degrees of rotation around x, y, z)
   this.orientation = [0, 0, 0]
@@ -20,7 +20,17 @@ Camera.prototype = {
     for (var i = 0; i < pointsArray.length; i++) {
       pointsToRotate[i] = this.matrixOps.vectSubtract(pointsArray[i], this.location)
     }
-    return this.rotation.rotateObjectAllAxes(pointsToRotate, this.orientation[0], this.orientation[1], this.orientation[2])
+    return this.rotation.intrinsicInverseRotateObjectAllAxes(pointsToRotate, this.orientation[0], this.orientation[1], this.orientation[2])
+  },
+
+  /**
+   * Reorients the camera ,given a vector representing the change in its positon
+   * (according to a coorinate system defined by the camera itself)
+   */
+  reorient: function reorient (vector) {
+    //var transformedVector = this.rotation.rotateVectorAllAxes(vector, -this.orientation[0], -this.orientation[1], -this.orientation[2])
+    //var transformedVector = this.rotation.intrinsicInverseRotateVectorAllAxes(vector, -this.orientation[0], -this.orientation[1], -this.orientation[2])
+    this.orientation = this.matrixOps.vectAdd(this.orientation, vector)
   },
 
   /**

@@ -66,8 +66,18 @@ Rotation.prototype = {
     return this.matrixOps.vectMatMul(rotMatrix, vect)
   },
 
+  intrinsicRotateVectorAllAxes: function rotateVectorAllAxes (vect, xAng, yAng, zAng) {
+    var rotMatrix = this.getXYZRotMat(zAng, yAng, xAng)
+    return this.matrixOps.vectMatMul(rotMatrix, vect)
+  },
+
   inverseRotateVectorAllAxes: function rotateVectorAllAxes (vect, xAng, yAng, zAng) {
     var rotMatrix = this.matrixOps.invert(this.getXYZRotMat(xAng, yAng, zAng))
+    return this.matrixOps.vectMatMul(rotMatrix, vect)
+  },
+
+  intrinsicInverseRotateVectorAllAxes: function rotateVectorAllAxes (vect, xAng, yAng, zAng) {
+    var rotMatrix = this.matrixOps.invert(this.getXYZRotMat(zAng, yAng, xAng))
     return this.matrixOps.vectMatMul(rotMatrix, vect)
   },
 
@@ -85,6 +95,44 @@ Rotation.prototype = {
 
   rotateObjectAllAxes: function rotateObjectAllAxes (object, xAng, yAng, zAng) {
     var rotMatrix = this.getXYZRotMat(xAng, yAng, zAng)
+    var rotated = []
+    for (var i = 0; i < object.length; i++) {
+      // this.pointRotateCount += 1
+      // if (this.pointRotateCount % 1000 === 0) {
+      //   console.log(this.pointRotateCount)
+      // }
+      rotated.push(this.matrixOps.vectMatMul(rotMatrix, object[i]))
+    }
+    return rotated
+  },
+
+  inverseRotateObjectAllAxes: function inverseRotateObjectAllAxes (object, xAng, yAng, zAng) {
+    var rotMatrix = this.matrixOps.invert(this.getXYZRotMat(xAng, yAng, zAng))
+    var rotated = []
+    for (var i = 0; i < object.length; i++) {
+      // this.pointRotateCount += 1
+      // if (this.pointRotateCount % 1000 === 0) {
+      //   console.log(this.pointRotateCount)
+      // }
+      rotated.push(this.matrixOps.vectMatMul(rotMatrix, object[i]))
+    }
+    return rotated
+  },
+
+  intrinsicRotateObjectAllAxes: function rotateObjectAllAxes (object, xAng, yAng, zAng) {
+    var rotMatrix = this.getXYZRotMat(yAng, zAng, xAng)
+    var rotated = []
+    for (var i = 0; i < object.length; i++) {
+      // this.pointRotateCount += 1
+      // if (this.pointRotateCount % 1000 === 0) {
+      //   console.log(this.pointRotateCount)
+      // }
+      rotated.push(this.matrixOps.vectMatMul(rotMatrix, object[i]))
+    }
+    return rotated
+  }, 
+  intrinsicInverseRotateObjectAllAxes: function inverseRotateObjectAllAxes (object, xAng, yAng, zAng) {
+    var rotMatrix = this.matrixOps.invert(this.getXYZRotMat(zAng, yAng, xAng))
     var rotated = []
     for (var i = 0; i < object.length; i++) {
       // this.pointRotateCount += 1

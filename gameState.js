@@ -112,6 +112,17 @@ GameState.prototype = {
     return this.rotation.rotateObjectAllAxes(newObj, angle + 9, angle + 10, angle + 15)
   },
 
+  alter3: function alter2 (object, angle) {
+    var newObj = []
+    for (var i = 0; i < object.length; i++) {
+      newObj[i] = []
+      for (var j = 0; j < 3; j++) {
+        newObj[i][j] = object[i][j] + 400
+      }
+    }
+    return this.rotation.intrinsicRotateObjectAllAxes(newObj, angle + 9, angle + 10, angle + 15)
+  },
+
   spin: function spin () {
     var i
     var threeDObjectsThisFrame = []
@@ -120,6 +131,7 @@ GameState.prototype = {
     threeDObjectsThisFrame.push(this.rotation.rotateObjectAllAxes(this.cubeArray, angle, angle, angle))
     threeDObjectsThisFrame.push(this.alter1(this.cubeArray, angle))
     threeDObjectsThisFrame.push(this.alter2(this.cubeArray, angle))
+    threeDObjectsThisFrame.push(this.alter3(this.cubeArray, angle))
     threeDObjectsThisFrame.push(this.floor)
     for (i = 0; i < this.axes.length; i++) {
       threeDObjectsThisFrame.push(this.axes[i])
