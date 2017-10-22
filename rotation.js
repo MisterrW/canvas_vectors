@@ -67,8 +67,8 @@ Rotation.prototype = {
   },
 
   inverseRotateVectorAllAxes: function rotateVectorAllAxes (vect, xAng, yAng, zAng) {
-    // var rotMatrix = this.matrixOps.invert(this.getXYZRotMat(xAng, yAng, zAng))
-    // return this.matrixOps.vectMatMul(rotMatrix, vect)
+    var rotMatrix = this.matrixOps.invert(this.getXYZRotMat(xAng, yAng, zAng))
+    return this.matrixOps.vectMatMul(rotMatrix, vect)
   },
 
   /**

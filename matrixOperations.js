@@ -37,13 +37,89 @@ MatrixOperations.prototype = {
     }
   },
 
+  // until I get the general fn working
+  matInv3x3: function matInv3x3 (mat) {
+    var identity = [
+      [1, 0, 0], [0, 1, 0], [0, 0, 1]
+    ]
+    var aug = []
+    for (var i = 0; i < mat.length; i++) {
+      aug[i] = mat[i].concat(identity[i])
+    }
+    var height = mat.length
+    var origWidth = height
+    var augWidth = aug[0].length
+    // first, get a 1 in the top left pos
+    var divisor = aug[0][0]
+    for (var i = 0; i < augWidth; i++) {
+      aug[0][i] = aug[0][i] / divisor
+      // console.log(aug[0][i])
+    }
+    // next, get 0s in pos 0 of rows 1 and 2
+    var row1Multiplier = aug[1][0]
+    for (var i = 0; i < augWidth; i++) {
+      aug[1][i] -= aug[0][i] * row1Multiplier
+    }
+    var row2Multiplier = aug[2][0]
+    for (var i = 0; i < augWidth; i++) {
+      aug[2][i] -= aug[0][i] * row2Multiplier
+    }
+    // this.matPrint(aug)
+
+    // now repeat for row 1, position 1
+    // first, get a 1 in the 1, 1 pos
+    var divisor = aug[1][1]
+    // console.log(divisor)
+    for (var i = 0; i < augWidth; i++) {
+      aug[1][i] = aug[1][i] / divisor
+      // console.log(aug[1][i])
+    }
+    // next, get 0s in pos 1 of rows 0 and 2
+    var row0Multiplier = aug[0][1]
+    for (var i = 0; i < augWidth; i++) {
+      aug[0][i] -= aug[1][i] * row0Multiplier
+    }
+    var row2Multiplier = aug[2][1]
+    for (var i = 0; i < augWidth; i++) {
+      aug[2][i] -= aug[1][i] * row2Multiplier
+    }
+    // this.matPrint(aug)
+
+    // finally, repeat for row 2, position 2
+    // first, get a 1 in the 2, 2 pos
+    var divisor = aug[2][2]
+    // console.log(divisor)
+    for (var i = 0; i < augWidth; i++) {
+      aug[2][i] = aug[2][i] / divisor
+      // console.log(aug[2][i])
+    }
+    // next, get 0s in pos 2 of rows 0 and 1
+    var row0Multiplier = aug[0][2]
+    for (var i = 0; i < augWidth; i++) {
+      aug[0][i] -= aug[2][i] * row0Multiplier
+    }
+    var row1Multiplier = aug[1][2]
+    for (var i = 0; i < augWidth; i++) {
+      aug[1][i] -= aug[2][i] * row1Multiplier
+    }
+    // this.matPrint(aug)
+    // return aug
+    return ([
+      [aug[0][3], aug[0][4], aug[0][5]],
+      [aug[1][3], aug[1][4], aug[1][5]],
+      [aug[2][3], aug[2][4], aug[2][5]]
+    ])
+  },
+
   /**
   * Returns the inverse of a matrix (if it has one) via Gauss-Jordan elimination
   */
   invert: function invert (M) {
+    return this.matInv3x3(M)
+
     var I = this.getIdentity(M)
     var i
-    if (!I) { return }
+    if (!I) { }
     // augment M with I
     var aug = []
     for (i = 0; i < M.length; i++) {
@@ -88,6 +164,7 @@ MatrixOperations.prototype = {
       var pivotRowNo = i
       for (j = i; j < aug.length; j++) {
         if (aug[j][i] > pivotVal) {
+          pivotVal = aug[j][i]
           pivotRowNo = j
         }
       }

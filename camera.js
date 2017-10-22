@@ -36,20 +36,21 @@ Camera.prototype = {
     //   [4, 7, 6],
     //   [8, 2, 4]
     // ])
-    this.matrixOps.invert([
-      [2, 1, -1],
-      [-3, -1, 2],
-      [-2, 1, 2]
-    ])
+    // this.matrixOps.invert([
+    //   [2, 1, -1],
+    //   [-3, -1, 2],
+    //   [-2, 1, 2]
+    // ])
 
     // this.matrixOps.invert([
     //   [1.333, 5.63, 32.6],
     //   [4.45, 7.25, 6.11],
     //   [8.435, 2.523, 4.2]
     // ])
-    console.log('orientation 1: ' + this.orientation)
+    //console.log('orientation 1: ' + this.orientation)
     // var transformedVector = this.rotation.rotateVectorAllAxes(vector, this.orientation[0], this.orientation[1], 0)
-    var transformedVector = this.rotation.rotateVectorAllAxes(vector, -this.orientation[0], -this.orientation[1], -this.orientation[2])
+    // var transformedVector = this.rotation.rotateVectorAllAxes(vector, -this.orientation[0], -this.orientation[1], -this.orientation[2])
+    var transformedVector = this.rotation.inverseRotateVectorAllAxes(vector, this.orientation[0], this.orientation[1], this.orientation[2])
     // console.log('vector: ' + vector + ', transformed vector: ' + transformedVector)
     this.location = this.matrixOps.vectAdd(this.location, transformedVector)
     // console.log('orientation 2: ' + this.orientation)
