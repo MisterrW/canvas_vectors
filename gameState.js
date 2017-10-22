@@ -46,6 +46,17 @@ var GameState = function GameState (rotation, renderer, projector, camera) {
     this.axes[2].push([0, 0, i])
   }
 
+  this.references = [
+
+  ]
+  for (i = -10000; i < 10000; i += 3000) {
+    for (var j = -10000; j < 10000; j += 3000) {
+      for (var k = -10000; k < 10000; k += 3000) {
+        this.references.push([[i, j, k], [i + 20, j + 20, k + 20]])
+      }
+    }
+  }
+
   this.axisLabels = [
     // x
     [[500, 30, 0], [530, 60, 0]],
@@ -136,6 +147,9 @@ GameState.prototype = {
     threeDObjectsThisFrame.push(this.floor)
     for (i = 0; i < this.axes.length; i++) {
       threeDObjectsThisFrame.push(this.axes[i])
+    }
+    for (i = 0; i < this.references.length; i++) {
+      threeDObjectsThisFrame.push(this.references[i])
     }
     for (i = 0; i < this.axisLabels.length; i++) {
       threeDObjectsThisFrame.push(this.axisLabels[i])
