@@ -27,6 +27,39 @@ var GameState = function GameState (rotation, renderer, projector, camera) {
     [200.0, -200.0, 200.0],
     [200.0, -200.0, -200.0]
   ]
+  this.axes = [
+    [], [], []
+  ]
+  this.axisLabels = [
+    // x
+    [[500, 30, 0], [530, 60, 0]],
+    [[500, 60, 0], [530, 30, 0]],
+
+    [[550, 0, 30], [580, 0, 60]],
+    [[550, 0, 60], [580, 0, 30]],
+
+    // y
+    [[30, 500, 0], [60, 530, 0]],
+    [[45, 515, 0], [30, 530, 0]],
+
+    [[0, 565, 45], [0, 580, 60]],
+    [[0, 550, 60], [0, 580, 30]],
+
+    //z
+    [[60, 0, 500], [60, 0, 530]],
+    [[30, 0, 500], [30, 0, 530]],
+    [[30, 0, 500], [60, 0, 530]],
+
+    [[0, 30, 550], [0, 30, 580]],
+    [[0, 60, 550], [0, 60, 580]],
+    [[0, 60, 550], [0, 30, 580]]
+  ]
+
+  for (var i = -1000; i < 1000; i += 200) {
+    this.axes[0].push([i, 0, 0])
+    this.axes[1].push([0, i, 0])
+    this.axes[2].push([0, 0, i])
+  }
 
   this.wall = [
 
@@ -76,9 +109,15 @@ GameState.prototype = {
     objectsThisFrame.push(this.alter1(this.cubeArray, angle))
     objectsThisFrame.push(this.alter2(this.cubeArray, angle))
     objectsThisFrame.push(this.floor)
-    for (var i = 0; i < this.wall.length; i++) {
-      objectsThisFrame.push(this.wall[i])
+    for (var i = 0; i < this.axes.length; i++) {
+      objectsThisFrame.push(this.axes[i])
     }
+    for(var i = 0; i < this.axisLabels.length; i++) {
+      objectsThisFrame.push(this.axisLabels[i])
+    }
+    // for (var i = 0; i < this.wall.length; i++) {
+    //   objectsThisFrame.push(this.wall[i])
+    // }
 
     this.renderer.preRender()
     for (var i = 0; i < objectsThisFrame.length; i++) {
