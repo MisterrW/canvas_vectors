@@ -40,8 +40,6 @@ MouseMovement.prototype = {
     } else if (this.camera.orientation[0] < -1.57) {
       this.camera.orientation[0] = -1.57
     }
-    this.camera.orientation[2] = 0
     this.lastLocation = location
-    console.log(this.camera.orientation)
   }
 }

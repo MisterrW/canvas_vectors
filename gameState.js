@@ -1,10 +1,19 @@
 /* globals */
 
 var GameState = function GameState (rotation, renderer, projector, camera) {
+  var i
   this.rotation = rotation
   this.renderer = renderer
   this.projector = projector
   this.camera = camera
+
+  this.crosshair = [
+    [[500, 280], [500, 290]],
+    [[480, 300], [490, 300]],
+    [[500, 310], [500, 320]],
+    [[510, 300], [520, 300]]
+  ]
+
   this.cube = {
   // point: [x, y, z]
     ntl: [-40.0, 40.0, 40.0],
@@ -30,6 +39,13 @@ var GameState = function GameState (rotation, renderer, projector, camera) {
   this.axes = [
     [], [], []
   ]
+
+  for (i = -1000; i < 1000; i += 200) {
+    this.axes[0].push([i, 0, 0])
+    this.axes[1].push([0, i, 0])
+    this.axes[2].push([0, 0, i])
+  }
+
   this.axisLabels = [
     // x
     [[500, 30, 0], [530, 60, 0]],
@@ -45,7 +61,7 @@ var GameState = function GameState (rotation, renderer, projector, camera) {
     [[0, 565, 45], [0, 580, 60]],
     [[0, 550, 60], [0, 580, 30]],
 
-    //z
+    // z
     [[60, 0, 500], [60, 0, 530]],
     [[30, 0, 500], [30, 0, 530]],
     [[30, 0, 500], [60, 0, 530]],
@@ -55,23 +71,17 @@ var GameState = function GameState (rotation, renderer, projector, camera) {
     [[0, 60, 550], [0, 30, 580]]
   ]
 
-  for (var i = -1000; i < 1000; i += 200) {
-    this.axes[0].push([i, 0, 0])
-    this.axes[1].push([0, i, 0])
-    this.axes[2].push([0, 0, i])
-  }
-
   this.wall = [
 
   ]
 
-  for (var i = -10000; i < 10000; i += 100) {
+  for (i = -10000; i < 10000; i += 100) {
     this.wall.push([[500, 1000, i - 100], [500, -1000, i]])
   }
 
   this.cubeArray = []
   this.cubeKeys = Object.keys(this.cube)
-  for (var i = 0; i < this.cubeKeys.length; i++) {
+  for (i = 0; i < this.cubeKeys.length; i++) {
     this.cubeArray.push(this.cube[this.cubeKeys[i]])
   }
   console.log(this.cubeArray)
@@ -103,25 +113,31 @@ GameState.prototype = {
   },
 
   spin: function spin () {
-    var objectsThisFrame = []
+    var i
+    var threeDObjectsThisFrame = []
+    var twoDObjectsThisFrame = []
     var angle = this.stillGoing % 360.0
-    objectsThisFrame.push(this.rotation.rotateObjectAllAxes(this.cubeArray, angle, angle, angle))
-    objectsThisFrame.push(this.alter1(this.cubeArray, angle))
-    objectsThisFrame.push(this.alter2(this.cubeArray, angle))
-    objectsThisFrame.push(this.floor)
-    for (var i = 0; i < this.axes.length; i++) {
-      objectsThisFrame.push(this.axes[i])
+    threeDObjectsThisFrame.push(this.rotation.rotateObjectAllAxes(this.cubeArray, angle, angle, angle))
+    threeDObjectsThisFrame.push(this.alter1(this.cubeArray, angle))
+    threeDObjectsThisFrame.push(this.alter2(this.cubeArray, angle))
+    threeDObjectsThisFrame.push(this.floor)
+    for (i = 0; i < this.axes.length; i++) {
+      threeDObjectsThisFrame.push(this.axes[i])
     }
-    for(var i = 0; i < this.axisLabels.length; i++) {
-      objectsThisFrame.push(this.axisLabels[i])
+    for (i = 0; i < this.axisLabels.length; i++) {
+      threeDObjectsThisFrame.push(this.axisLabels[i])
     }
-    // for (var i = 0; i < this.wall.length; i++) {
-    //   objectsThisFrame.push(this.wall[i])
-    // }
+    for (i = 0; i < this.crosshair.length; i++) {
+      twoDObjectsThisFrame.push(this.crosshair[i])
+    }
 
     this.renderer.preRender()
-    for (var i = 0; i < objectsThisFrame.length; i++) {
-      this.renderer.writeFlattenedArray(this.projector.mapPointsArrToPlane(this.camera.orientPointsArray(objectsThisFrame[i])))
+    for (i = 0; i < threeDObjectsThisFrame.length; i++) {
+      this.renderer.writeFlattenedArray(this.projector.mapPointsArrToPlane(this.camera.orientPointsArray(threeDObjectsThisFrame[i])))
+    }
+    this.renderer.writeFlattenedArray([[345, 300], [453, 300]])
+    for (i = 0; i < twoDObjectsThisFrame.length; i++) {
+      this.renderer.writeFlattenedArray(twoDObjectsThisFrame[i], true)
     }
     this.renderer.render()
 
