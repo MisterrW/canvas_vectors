@@ -49,12 +49,18 @@ var GameState = function GameState (rotation, renderer, projector, camera) {
   this.references = [
 
   ]
-  for (i = -10000; i < 10000; i += 3000) {
-    for (var j = -10000; j < 10000; j += 3000) {
-      for (var k = -10000; k < 10000; k += 3000) {
-        this.references.push([[i, j, k], [i + 20, j + 20, k + 20]])
-      }
-    }
+  // for (i = -10000; i < 10000; i += 3000) {
+  //   for (var j = -10000; j < 10000; j += 3000) {
+  //     for (var k = -10000; k < 10000; k += 3000) {
+  //       this.references.push([[i, j, k], [i + 20, j + 20, k + 20]])
+  //     }
+  //   }
+  // }
+  for (i = 0; i < 5000; i++) {
+    var l = -1000000 + Math.floor(Math.random() * 2000000)
+    var j = -1000000 + Math.floor(Math.random() * 2000000)
+    var k = -1000000 + Math.floor(Math.random() * 2000000)
+    this.references.push([[l, j, k], [l + Math.floor(Math.random() * 1000), j + Math.floor(Math.random() * 1000), k + Math.floor(Math.random() * 1000)]])
   }
 
   this.axisLabels = [

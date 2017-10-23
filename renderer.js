@@ -5,7 +5,7 @@
 var Renderer = function Renderer () {
   this.canvas = document.querySelector('#my3dCanvas')
   this.ctx = this.canvas.getContext('2d')
-  this.strokeStyle = 'black'
+  this.ctx.strokeStyle = 'white'
 }
 
 Renderer.prototype = {
