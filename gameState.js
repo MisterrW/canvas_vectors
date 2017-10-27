@@ -37,14 +37,9 @@ var GameState = function GameState (rotation, renderer, projector, camera) {
     [200.0, -200.0, -200.0]
   ]
 
-  this.trees = [
-    getTree([-350, -200, -350]),
-    getTree([-230, -200, -160]),
-    getTree([250, -200, 400]),
-    getTree([170, -200, 170])
-  ]
+  this.trees = []
 
-  for (i = 0; i < 5; i++) {
+  for (i = 0; i < 10; i++) {
     this.trees.push(getTree([-600 + (Math.random() * 1200), -200, -600 + (Math.random() * 1200)]))
   }
 
@@ -53,9 +48,9 @@ var GameState = function GameState (rotation, renderer, projector, camera) {
   ]
 
   for (i = -1000; i < 1000; i += 200) {
-    this.axes[0].push([i, 0, 0])
-    this.axes[1].push([0, i, 0])
-    this.axes[2].push([0, 0, i])
+    this.axes[0].push([i-2000, 0, 0])
+    this.axes[1].push([-2000, i, 0])
+    this.axes[2].push([-2000, 0, i])
   }
 
   this.references = [
@@ -99,6 +94,12 @@ var GameState = function GameState (rotation, renderer, projector, camera) {
     [[0, 60, 550], [0, 60, 580]],
     [[0, 60, 550], [0, 30, 580]]
   ]
+
+  for(var i = 0; i < this.axisLabels.length; i++) {
+    for (var j = 0; j < 2; j++) {
+      this.axisLabels[i][j][0] -= 2000
+    }
+  }
 
   this.wall = [
 
