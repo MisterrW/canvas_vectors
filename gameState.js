@@ -27,15 +27,27 @@ var GameState = function GameState (rotation, renderer, projector, camera) {
   }
 
   this.floor = [
-    [-400.0, -200.0, 400.0],
-    [-400.0, -200.0, -400.0],
-    [400.0, -200.0, 400.0],
-    [400.0, -200.0, -400.0],
+    [-600.0, -200.0, 600.0],
+    [-600.0, -200.0, -600.0],
+    [600.0, -200.0, 600.0],
+    [600.0, -200.0, -600.0],
     [-200.0, -200.0, 200.0],
     [-200.0, -200.0, -200.0],
     [200.0, -200.0, 200.0],
     [200.0, -200.0, -200.0]
   ]
+
+  this.trees = [
+    getTree([-350, -200, -350]),
+    getTree([-230, -200, -160]),
+    getTree([250, -200, 400]),
+    getTree([170, -200, 170])
+  ]
+
+  for (i = 0; i < 5; i++) {
+    this.trees.push(getTree([-600 + (Math.random() * 1200), -200, -600 + (Math.random() * 1200)]))
+  }
+
   this.axes = [
     [], [], []
   ]
@@ -160,6 +172,13 @@ GameState.prototype = {
     for (i = 0; i < this.axisLabels.length; i++) {
       threeDObjectsThisFrame.push(this.axisLabels[i])
     }
+    for (i = 0; i < this.trees.length; i++) {
+      for (var j = 0; j < this.trees[i].length; j++) {
+        threeDObjectsThisFrame.push(this.trees[i][j])
+        this.projector.mapPointsArrToPlane(this.camera.orientPointsArray(this.trees[i][j]))
+      }
+    }
+
     for (i = 0; i < this.crosshair.length; i++) {
       twoDObjectsThisFrame.push(this.crosshair[i])
     }
