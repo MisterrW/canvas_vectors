@@ -17,21 +17,22 @@ KeyMovement.prototype = {
     var orientZ = 0
     // look up / down
     if (activeKeys[76]) {
-      orientX = 0.01
-    } else if (activeKeys[79]) {
       orientX = -0.01
+    } else if (activeKeys[79]) {
+      orientX = +0.01
     }
     // bank left / right (yaw)
     if (activeKeys[186]) {
-      orientZ = 0.03
-    } else if (activeKeys[75]) {
       orientZ = -0.03
+    } else if (activeKeys[75]) {
+      orientZ = +0.03
     }
+
+    // var mouseChange = 
 
     var orientMatrix = this.rotation.getXYZRotMat(orientX, orientY, orientZ)
 
     // keys control camera position
-    // this kind of works, but it moves the camera location relative to the 'real' axes, not camera orientation - need another transformation
     var moveMatrix = this.matrixOps.getIdentity4()
     // forward (w s)
     if (activeKeys[87]) {

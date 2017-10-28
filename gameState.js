@@ -52,9 +52,9 @@ var GameState = function GameState (rotation, renderer, projector, camera) {
   ]
 
   for (i = -1000; i < 1000; i += 200) {
-    this.axes[0].push(new Vector(i - 2000, 0, 0, 1))
-    this.axes[1].push(new Vector(-2000, i, 0, 1))
-    this.axes[2].push(new Vector(-2000, 0, i, 1))
+    this.axes[0].push(new Vector(i, 0, 0, 1))
+    this.axes[1].push(new Vector(0, i, 0, 1))
+    this.axes[2].push(new Vector(0, 0, i, 1))
   }
 
   this.stars = []
@@ -95,7 +95,7 @@ var GameState = function GameState (rotation, renderer, projector, camera) {
 
   for (i = 0; i < this.axisLabels.length; i++) {
     for (j = 0; j < 2; j++) {
-      this.axisLabels[i][j]['x'] -= 2000
+      // this.axisLabels[i][j]['x'] -= 2000
     }
   }
 
@@ -161,11 +161,11 @@ GameState.prototype = {
     var threeDObjectsThisFrame = []
     var twoDObjectsThisFrame = []
     var angle = this.stillGoing % 360.0
-    threeDObjectsThisFrame.push(this.rotation.rotateObjectAllAxes(this.cubeArray, angle, angle, angle))
-    threeDObjectsThisFrame.push(this.alter1(this.cubeArray, angle))
-    threeDObjectsThisFrame.push(this.alter2(this.cubeArray, angle))
-    threeDObjectsThisFrame.push(this.alter3(this.cubeArray, angle))
-    threeDObjectsThisFrame.push(this.floor)
+    // threeDObjectsThisFrame.push(this.rotation.rotateObjectAllAxes(this.cubeArray, angle, angle, angle))
+    // threeDObjectsThisFrame.push(this.alter1(this.cubeArray, angle))
+    // threeDObjectsThisFrame.push(this.alter2(this.cubeArray, angle))
+    // threeDObjectsThisFrame.push(this.alter3(this.cubeArray, angle))
+    // threeDObjectsThisFrame.push(this.floor)
     for (i = 0; i < this.axes.length; i++) {
       threeDObjectsThisFrame.push(this.axes[i])
     }
@@ -181,13 +181,13 @@ GameState.prototype = {
     }
 
     this.renderer.preRender()
-    for (i = 0; i < this.trees.length; i++) {
-      this.renderer.setWriteColor(this.getRandomGrey())
-      for (var j = 0; j < this.trees[i].length; j++) {
-        // threeDObjectsThisFrame.push(this.trees[i][j])
-        this.renderer.writeFlattenedArray(this.projector.mapPointsArrToPlane(this.camera.orientPointsArray(this.trees[i][j])))
-      }
-    }
+    // for (i = 0; i < this.trees.length; i++) {
+    //   this.renderer.setWriteColor(this.getRandomGrey())
+    //   for (var j = 0; j < this.trees[i].length; j++) {
+    //     // threeDObjectsThisFrame.push(this.trees[i][j])
+    //     this.renderer.writeFlattenedArray(this.projector.mapPointsArrToPlane(this.camera.orientPointsArray(this.trees[i][j])))
+    //   }
+    // }
     this.renderer.resetColor()
     for (i = 0; i < threeDObjectsThisFrame.length; i++) {
       this.renderer.writeFlattenedArray(this.projector.mapPointsArrToPlane(this.camera.orientPointsArray(threeDObjectsThisFrame[i])))

@@ -7,11 +7,14 @@ var Camera = function (matrixOps, rotation, hud) {
 
   // the transformation which defines the camera's location in world space
   this.cameraTransform = this.matrixOps.getIdentity4()
+  this.cameraTransform[2][3] = 1000
+  this.cameraTransform[1][3] = 500
+  this.cameraTransform[0][3] = 500
   // the transformation which gets you from world space to view space (inverse of the above)
-  this.viewSpaceTransform = this.matrixOps.getIdentity4()
+  this.viewSpaceTransform = this.matrixOps.invert(this.cameraTransform)
 
   // this.hud.updateOrientation(this.orientation[0], this.orientation[1], this.orientation[2])
-  // this.hud.updateLocation(this.location.x, this.location.y, this.location.z)
+  this.hud.updateLocation(this.matrixOps.matMul(this.cameraTransform, new Vector(0, 0, 0)))
 }
 
 Camera.prototype = {
@@ -34,5 +37,10 @@ Camera.prototype = {
   move: function move (moveMatrix) {
     this.cameraTransform = this.matrixOps.matMul(this.cameraTransform, moveMatrix)
     this.viewSpaceTransform = this.matrixOps.invert(this.cameraTransform)
+    // console.log(this.cameraTransform)
+    // console.log(this.viewSpaceTransform)
+    // this.hud.updateLocation(this.cameraTransform )
+    var pos = this.matrixOps.vectMatMul(this.cameraTransform, new Vector(0, 0, 0))
+    this.hud.updateLocation(pos.x, pos.y, pos.z)
   }
 }

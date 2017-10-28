@@ -42,7 +42,7 @@ var Rotation = function Rotation (matrixOps) {
   }
 
   // this.pointRotateCount2 = 0
-  this.pointRotateCount = 0
+  // this.pointRotateCount = 0
 }
 
 Rotation.prototype = {
