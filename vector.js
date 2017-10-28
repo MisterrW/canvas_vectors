@@ -11,7 +11,7 @@ var Vector = function (x, y, z, w) {
 
 Vector.prototype = {
   getLength: function getLength () {
-
+    return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z)
   },
 
   as3Array: function as3Array () {

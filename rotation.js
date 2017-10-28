@@ -14,7 +14,7 @@ var Rotation = function Rotation (matrixOps) {
         [1, 0, 0, 0],
         [0, cosA, -sinA, 0],
         [0, sinA, cosA, 0],
-        [0, 0, 0, 0]
+        [0, 0, 0, 1]
       ]
     },
 
@@ -25,7 +25,7 @@ var Rotation = function Rotation (matrixOps) {
         [cosA, 0, sinA, 0],
         [0, 1, 0, 0],
         [-sinA, 0, cosA, 0],
-        [0, 0, 0, 0]
+        [0, 0, 0, 1]
       ]
     },
 
@@ -36,7 +36,7 @@ var Rotation = function Rotation (matrixOps) {
         [cosA, -sinA, 0, 0],
         [sinA, cosA, 0, 0],
         [0, 0, 1, 0],
-        [0, 0, 0, 0]
+        [0, 0, 0, 1]
       ]
     }
   }

@@ -16,7 +16,6 @@ var Camera = function (matrixOps, rotation, hud) {
 
   this.hud.updateOrientation(this.orientation[0], this.orientation[1], this.orientation[2])
   this.hud.updateLocation(this.location.x, this.location.y, this.location.z)
-  
 }
 
 Camera.prototype = {
@@ -30,7 +29,7 @@ Camera.prototype = {
     for (var i = 0; i < pointsArray.length; i++) {
       pointsToRotate[i] = this.matrixOps.vectSubtract(pointsArray[i], this.location)
     }
-    var rotatedPoints = this.rotation.rotateObjectAllAxes(pointsToRotate, this.orientation[0], this.orientation[1], this.orientation[2])
+    var rotatedPoints = this.rotation.inverseRotateObjectAllAxes(pointsToRotate, this.orientation[0], this.orientation[1], this.orientation[2])
     // var returnPoints = []
     // for (var i = 0; i < rotatedPoints.length; i++) {
     //   returnPoints[i] = this.matrixOps.vectAdd(pointsArray[i], this.location)
@@ -41,8 +40,26 @@ Camera.prototype = {
 
   /**
    * Reorients the camera, given a vector representing the change in its positon
-   * (according to a coordinate system defined by the camera itself)
+   * (according to a coordinate system defined by the camera itself??)
    */
+
+  /*
+
+  how I think this should work:
+
+  find the transformation matrix which takes the camera from the origin to its current position (this will be a combination of a rotation and a translation)
+  find the inverse of that matrix and apply it, so that the camera is at the origin, facing directly down the x axis
+  -  note: this inverse matrix should also be the matrix which transforms all other points (the view matrix) and may well be worth storing
+
+  combine the new movement / orientation info with the current transformation matrix, save this as the camera location / orientation matrix
+  -  note: why bother with the inverse step here? Just multiply the new transformation by the existing one, and store that as the new camera transform
+
+  so we are saving two matrices:
+  -  the camera transform (that takes the camera from location 0,0,0 and neutral orientation)
+  -  the view transform (that takes the camera back to origin for movement / orientation calculations, and which brings all world points into camera space)
+
+  */
+
   reorient: function reorient (vector) {
     // do roll, we know this works
     this.orientation[2] += vector['z']

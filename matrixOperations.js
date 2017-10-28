@@ -50,8 +50,8 @@ MatrixOperations.prototype = {
     for (i = 0; i < mat.length; i++) {
       aug[i] = mat[i].concat(identity[i])
     }
-    
-    this.matPrint(aug)
+
+    // this.matPrint(aug)
 
     var augWidth = aug[0].length
     // first, get a 1 in the top left pos
@@ -142,7 +142,7 @@ MatrixOperations.prototype = {
       aug[2][i] -= aug[3][i] * row2Multiplier
     }
 
-    this.matPrint(aug)
+    // this.matPrint(aug)
     // return aug
     return ([
       [aug[0][4], aug[0][5], aug[0][6], aug[0][7]],
