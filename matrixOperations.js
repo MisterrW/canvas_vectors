@@ -16,7 +16,14 @@ MatrixOperations.prototype = {
     //   }
     // }
     // speed up some common cases
-    if (height === 3) {
+    if (height === 4) {
+      return [
+        [1, 0, 0, 0],
+        [0, 1, 0, 0],
+        [0, 0, 1, 0],
+        [0, 0, 0, 1]
+      ]
+    } else if (height === 3) {
       return [
         [1, 0, 0],
         [0, 1, 0],
@@ -39,6 +46,14 @@ MatrixOperations.prototype = {
     }
   },
 
+  getIdentity4: function () {
+    return [
+      [1, 0, 0, 0],
+      [0, 1, 0, 0],
+      [0, 0, 1, 0],
+      [0, 0, 0, 1]
+    ]
+  },
   // until I get the general fn working
   matInv4x4: function matInv4x4 (mat) {
     var divisor, row0Multiplier, row1Multiplier, row2Multiplier, row3Multiplier, i

@@ -69,20 +69,20 @@ Rotation.prototype = {
     return this.matrixOps.vectMatMul(rotMatrix, vect)
   },
 
-  intrinsicRotateVectorAllAxes: function rotateVectorAllAxes (vect, xAng, yAng, zAng) {
-    var rotMatrix = this.getXYZRotMat(zAng, yAng, xAng)
-    return this.matrixOps.vectMatMul(rotMatrix, vect)
-  },
+  // intrinsicRotateVectorAllAxes: function rotateVectorAllAxes (vect, xAng, yAng, zAng) {
+  //   var rotMatrix = this.getXYZRotMat(zAng, yAng, xAng)
+  //   return this.matrixOps.vectMatMul(rotMatrix, vect)
+  // },
 
-  inverseRotateVectorAllAxes: function rotateVectorAllAxes (vect, xAng, yAng, zAng) {
-    var rotMatrix = this.matrixOps.invert(this.getXYZRotMat(xAng, yAng, zAng))
-    return this.matrixOps.vectMatMul(rotMatrix, vect)
-  },
+  // inverseRotateVectorAllAxes: function rotateVectorAllAxes (vect, xAng, yAng, zAng) {
+  //   var rotMatrix = this.matrixOps.invert(this.getXYZRotMat(xAng, yAng, zAng))
+  //   return this.matrixOps.vectMatMul(rotMatrix, vect)
+  // },
 
-  intrinsicInverseRotateVectorAllAxes: function rotateVectorAllAxes (vect, xAng, yAng, zAng) {
-    var rotMatrix = this.matrixOps.invert(this.getXYZRotMat(zAng, yAng, xAng))
-    return this.matrixOps.vectMatMul(rotMatrix, vect)
-  },
+  // intrinsicInverseRotateVectorAllAxes: function rotateVectorAllAxes (vect, xAng, yAng, zAng) {
+  //   var rotMatrix = this.matrixOps.invert(this.getXYZRotMat(zAng, yAng, xAng))
+  //   return this.matrixOps.vectMatMul(rotMatrix, vect)
+  // },
 
   /**
   * Transforms an array of points by a rotation, ie rotates an object, in a single axis
