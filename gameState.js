@@ -1,4 +1,4 @@
-/* globals */
+/* globals Vector getTree */
 
 var GameState = function GameState (rotation, renderer, projector, camera) {
   var i
@@ -16,31 +16,35 @@ var GameState = function GameState (rotation, renderer, projector, camera) {
 
   this.cube = {
   // point: [x, y, z]
-    ntl: [-40.0, 40.0, 40.0],
-    ntr: [40.0, 40.0, 40.0],
-    nbl: [-40.0, -40.0, 40.0],
-    nbr: [40.0, -40.0, 40.0],
-    ftl: [-40.0, 40.0, -40.0],
-    ftr: [40, 40, -40.0],
-    fbl: [-40.0, -40.0, -40.0],
-    fbr: [40.0, -40.0, -40.0]
+    ntl: new Vector(-40.0, 40.0, 40.0, 1),
+    ntr: new Vector(40.0, 40.0, 40.0, 1),
+    nbl: new Vector(-40.0, -40.0, 40.0, 1),
+    nbr: new Vector(40.0, -40.0, 40.0, 1),
+    ftl: new Vector(-40.0, 40.0, -40.0, 1),
+    ftr: new Vector(40.0, 40.0, -40.0, 1),
+    fbl: new Vector(-40.0, -40.0, -40.0, 1),
+    fbr: new Vector(40.0, -40.0, -40.0, 1)
   }
 
   this.floor = [
-    [-600.0, -200.0, 600.0],
-    [-600.0, -200.0, -600.0],
-    [600.0, -200.0, 600.0],
-    [600.0, -200.0, -600.0],
-    [-200.0, -200.0, 200.0],
-    [-200.0, -200.0, -200.0],
-    [200.0, -200.0, 200.0],
-    [200.0, -200.0, -200.0]
+    new Vector(-1000.0, -200.0, 1000.0, 1),
+    new Vector(-1000.0, -200.0, -1000.0, 1),
+    new Vector(1000.0, -200.0, 1000.0, 1),
+    new Vector(1000.0, -200.0, -1000.0, 1),
+    new Vector(-600.0, -200.0, 600.0, 1),
+    new Vector(-600.0, -200.0, -600.0, 1),
+    new Vector(600.0, -200.0, 600.0, 1),
+    new Vector(600.0, -200.0, -600.0, 1),
+    new Vector(-200.0, -200.0, 200.0, 1),
+    new Vector(-200.0, -200.0, -200.0, 1),
+    new Vector(200.0, -200.0, 200.0, 1),
+    new Vector(200.0, -200.0, -200.0, 1)
   ]
 
   this.trees = []
 
-  for (i = 0; i < 10; i++) {
-    this.trees.push(getTree([-600 + (Math.random() * 1200), -200, -600 + (Math.random() * 1200)]))
+  for (i = 0; i < 5; i++) {
+    this.trees.push(getTree([-1000 + (Math.random() * 2000), -200, -600 + (Math.random() * 1200)]))
   }
 
   this.axes = [
@@ -48,65 +52,57 @@ var GameState = function GameState (rotation, renderer, projector, camera) {
   ]
 
   for (i = -1000; i < 1000; i += 200) {
-    this.axes[0].push([i-2000, 0, 0])
-    this.axes[1].push([-2000, i, 0])
-    this.axes[2].push([-2000, 0, i])
+    this.axes[0].push(new Vector(i - 2000, 0, 0, 1))
+    this.axes[1].push(new Vector(-2000, i, 0, 1))
+    this.axes[2].push(new Vector(-2000, 0, i, 1))
   }
 
-  this.references = [
-
-  ]
-  // for (i = -10000; i < 10000; i += 3000) {
-  //   for (var j = -10000; j < 10000; j += 3000) {
-  //     for (var k = -10000; k < 10000; k += 3000) {
-  //       this.references.push([[i, j, k], [i + 20, j + 20, k + 20]])
-  //     }
-  //   }
-  // }
-  for (i = 0; i < 5000; i++) {
-    var l = -1000000 + Math.floor(Math.random() * 2000000)
-    var j = -1000000 + Math.floor(Math.random() * 2000000)
-    var k = -1000000 + Math.floor(Math.random() * 2000000)
-    this.references.push([[l, j, k], [l + Math.floor(Math.random() * 1000), j + Math.floor(Math.random() * 1000), k + Math.floor(Math.random() * 1000)]])
+  this.stars = []
+  var starRadius = 10000
+  var starCount = 5000
+  var starSize = 10
+  for (i = 0; i < starCount; i++) {
+    var l = -starRadius + Math.random() * 2 * starRadius
+    var j = -starRadius + Math.random() * 2 * starRadius
+    var k = -starRadius + Math.random() * 2 * starRadius
+    this.stars.push([new Vector(l, j, k, 1), new Vector(l + Math.random() * starSize, j + Math.random() * starSize, k + Math.random() * starSize, 1)])
   }
 
   this.axisLabels = [
     // x
-    [[500, 30, 0], [530, 60, 0]],
-    [[500, 60, 0], [530, 30, 0]],
+    [new Vector(500, 30, 0, 1), new Vector(530, 60, 0, 1)],
+    [new Vector(500, 60, 0, 1), new Vector(530, 30, 0, 1)],
 
-    [[550, 0, 30], [580, 0, 60]],
-    [[550, 0, 60], [580, 0, 30]],
+    [new Vector(550, 0, 30, 1), new Vector(580, 0, 60, 1)],
+    [new Vector(550, 0, 60, 1), new Vector(580, 0, 30, 1)],
 
     // y
-    [[30, 500, 0], [60, 530, 0]],
-    [[45, 515, 0], [30, 530, 0]],
+    [new Vector(30, 500, 0, 1), new Vector(60, 530, 0, 1)],
+    [new Vector(45, 515, 0, 1), new Vector(30, 530, 0, 1)],
 
-    [[0, 565, 45], [0, 580, 60]],
-    [[0, 550, 60], [0, 580, 30]],
+    [new Vector(0, 565, 45, 1), new Vector(0, 580, 60, 1)],
+    [new Vector(0, 550, 60, 1), new Vector(0, 580, 30, 1)],
 
     // z
-    [[60, 0, 500], [60, 0, 530]],
-    [[30, 0, 500], [30, 0, 530]],
-    [[30, 0, 500], [60, 0, 530]],
+    [new Vector(60, 0, 500, 1), new Vector(60, 0, 530, 1)],
+    [new Vector(30, 0, 500, 1), new Vector(30, 0, 530, 1)],
+    [new Vector(30, 0, 500, 1), new Vector(60, 0, 530, 1)],
 
-    [[0, 30, 550], [0, 30, 580]],
-    [[0, 60, 550], [0, 60, 580]],
-    [[0, 60, 550], [0, 30, 580]]
+    [new Vector(0, 30, 550, 1), new Vector(0, 30, 580, 1)],
+    [new Vector(0, 60, 550, 1), new Vector(0, 60, 580, 1)],
+    [new Vector(0, 60, 550, 1), new Vector(0, 30, 580, 1)]
   ]
 
-  for(var i = 0; i < this.axisLabels.length; i++) {
-    for (var j = 0; j < 2; j++) {
-      this.axisLabels[i][j][0] -= 2000
+  for (i = 0; i < this.axisLabels.length; i++) {
+    for (j = 0; j < 2; j++) {
+      this.axisLabels[i][j]['x'] -= 2000
     }
   }
 
-  this.wall = [
-
-  ]
+  this.wall = []
 
   for (i = -10000; i < 10000; i += 100) {
-    this.wall.push([[500, 1000, i - 100], [500, -1000, i]])
+    this.wall.push([new Vector(500, 1000, i - 100, 1), new Vector(500, -1000, i, 1)])
   }
 
   this.cubeArray = []
@@ -120,13 +116,15 @@ var GameState = function GameState (rotation, renderer, projector, camera) {
 }
 
 GameState.prototype = {
+  getRandomGrey: function getRandomGrey () {
+    var greys = ['white', 'grey', '#fff000']
+    return greys[Math.floor(Math.rand * greys.length)]
+  },
+
   alter1: function alter1 (object, angle) {
     var newObj = []
     for (var i = 0; i < object.length; i++) {
-      newObj[i] = []
-      for (var j = 0; j < 3; j++) {
-        newObj[i][j] = object[i][j] - 100
-      }
+      newObj[i] = new Vector(object[i]['x'] - 100, object[i]['y'] - 100, object[i]['z'] - 100)
     }
     return this.rotation.rotateObjectAllAxes(newObj, angle + 5, angle + 5, angle + 5)
   },
@@ -134,10 +132,7 @@ GameState.prototype = {
   alter2: function alter2 (object, angle) {
     var newObj = []
     for (var i = 0; i < object.length; i++) {
-      newObj[i] = []
-      for (var j = 0; j < 3; j++) {
-        newObj[i][j] = object[i][j] + 200
-      }
+      newObj[i] = new Vector(object[i]['x'] + 200, object[i]['y'] + 200, object[i]['z'] + 200)
     }
     return this.rotation.rotateObjectAllAxes(newObj, angle + 9, angle + 10, angle + 15)
   },
@@ -146,12 +141,19 @@ GameState.prototype = {
     var centre = [400, 400, 400]
     var newObj = []
     for (var i = 0; i < object.length; i++) {
-      newObj[i] = []
-      for (var j = 0; j < 3; j++) {
-        newObj[i][j] = object[i][j] + 400
-      }
+      newObj[i] = new Vector(object[i]['x'] + 400, object[i]['y'] + 400, object[i]['z'] + 400)
     }
     return this.rotation.translateAllPointsRotateAndTranslateBack(newObj, centre, angle + 9, angle + 10, angle + 15)
+  },
+
+  starsFall: function starsFall () {
+    for (var i = 0; i < this.stars.length; i++) {
+      var drop = (200 * Math.random()) - 250
+      var axes = ['x', 'y', 'z']
+      var ax = axes[Math.floor(Math.random() * 3)]
+      this.stars[i][0][ax] += drop
+      this.stars[i][1][ax] += drop
+    }
   },
 
   spin: function spin () {
@@ -167,17 +169,11 @@ GameState.prototype = {
     for (i = 0; i < this.axes.length; i++) {
       threeDObjectsThisFrame.push(this.axes[i])
     }
-    for (i = 0; i < this.references.length; i++) {
-      threeDObjectsThisFrame.push(this.references[i])
+    for (i = 0; i < this.stars.length; i++) {
+      threeDObjectsThisFrame.push(this.stars[i])
     }
     for (i = 0; i < this.axisLabels.length; i++) {
       threeDObjectsThisFrame.push(this.axisLabels[i])
-    }
-    for (i = 0; i < this.trees.length; i++) {
-      for (var j = 0; j < this.trees[i].length; j++) {
-        threeDObjectsThisFrame.push(this.trees[i][j])
-        this.projector.mapPointsArrToPlane(this.camera.orientPointsArray(this.trees[i][j]))
-      }
     }
 
     for (i = 0; i < this.crosshair.length; i++) {
@@ -185,6 +181,14 @@ GameState.prototype = {
     }
 
     this.renderer.preRender()
+    for (i = 0; i < this.trees.length; i++) {
+      this.renderer.setWriteColor(this.getRandomGrey())
+      for (var j = 0; j < this.trees[i].length; j++) {
+        // threeDObjectsThisFrame.push(this.trees[i][j])
+        this.renderer.writeFlattenedArray(this.projector.mapPointsArrToPlane(this.camera.orientPointsArray(this.trees[i][j])))
+      }
+    }
+    this.renderer.resetColor()
     for (i = 0; i < threeDObjectsThisFrame.length; i++) {
       this.renderer.writeFlattenedArray(this.projector.mapPointsArrToPlane(this.camera.orientPointsArray(threeDObjectsThisFrame[i])))
     }
@@ -195,5 +199,10 @@ GameState.prototype = {
     this.renderer.render()
 
     this.stillGoing -= 0.02
+  },
+
+  doStuff: function doStuff () {
+    // this.starsFall()
+    this.spin()
   }
 }

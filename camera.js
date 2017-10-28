@@ -1,12 +1,15 @@
+/* globals Vector */
+
 var Camera = function (matrixOps, rotation) {
   this.matrixOps = matrixOps
   this.rotation = rotation
   this.location =
     // [x, y, z]
-      [0.0, 20.0, 4000.0]
+       new Vector(1500.0, 50.0, 1500.0, 1)
+  // [0, 3000, 0]
 
   // Tait-Bryan rotation (degrees of rotation around x, y, z)
-  this.orientation = [0, 0, 0]
+  this.orientation = [-0.2, -0.8, 0.3]
 }
 
 Camera.prototype = {
@@ -30,16 +33,19 @@ Camera.prototype = {
   },
 
   /**
-   * Reorients the camera ,given a vector representing the change in its positon
+   * Reorients the camera, given a vector representing the change in its positon
    * (according to a coordinate system defined by the camera itself)
    */
   reorient: function reorient (vector) {
     // do roll, we know this works
-    this.orientation[2] += vector[2]
+    this.orientation[2] += vector['z']
 
     // then rotate remaining vector by new orientation
-    vector[2] = 0
-    this.orientation = this.matrixOps.vectAdd(this.orientation, this.rotation.inverseRotateVectorAllAxes(vector, this.orientation[0], this.orientation[1], this.orientation[2]))
+    vector['z'] = 0
+    var adjustedVector = this.rotation.rotateVectorAllAxes(vector, this.orientation[0], this.orientation[1], this.orientation[2])
+    this.orientation[0] += adjustedVector['x']
+    this.orientation[1] += adjustedVector['y']
+    this.orientation[2] += adjustedVector['z']
 
     //
     // var pointsToRotate = []
@@ -82,7 +88,7 @@ Camera.prototype = {
     // console.log('orientation 1: ' + this.orientation)
     // var transformedVector = this.rotation.rotateVectorAllAxes(vector, this.orientation[0], this.orientation[1], 0)
     // var transformedVector = this.rotation.rotateVectorAllAxes(vector, -this.orientation[0], -this.orientation[1], -this.orientation[2])
-    var transformedVector = this.rotation.inverseRotateVectorAllAxes(vector, this.orientation[0], this.orientation[1], this.orientation[2])
+    var transformedVector = this.rotation.rotateVectorAllAxes(vector, this.orientation[0], this.orientation[1], this.orientation[2])
     // console.log('vector: ' + vector + ', transformed vector: ' + transformedVector)
     this.location = this.matrixOps.vectAdd(this.location, transformedVector)
     // console.log('orientation 2: ' + this.orientation)

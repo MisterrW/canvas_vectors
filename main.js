@@ -23,7 +23,7 @@ window.onkeydown = function (e) { this.activeKeys[e.keyCode] = true }
 var mainLoop = function (gameState, keyMovement, mouseMovement) {
   //mouseMovement.move(mousePosition, mouseIsDown)
   keyMovement.move(activeKeys)
-  gameState.spin()
+  gameState.doStuff()
   // render (take out of gameState, so it just returns objects to render)
   function nextFrame () {
     mainLoop(gameState, keyMovement, mouseMovement)
