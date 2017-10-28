@@ -3,27 +3,31 @@
 */
 var MouseMovement = function (camera) {
   this.camera = camera
+  this.location = null
   this.lastLocation = null
+  this.mouseDown = false
 }
 
 MouseMovement.prototype = {
-  get: function move (location, mouseIsDown) {
-    if (!mouseIsDown) {
+  get: function move () {
+    if (!this.mouseDown) {
       this.lastLocation = null
       return
     }
-    if (!location || (location && this.lastLocation && this.lastLocation === location)) {
+    if (!this.location || (this.location && this.lastLocation && this.lastLocation === this.location)) {
       return
     }
     if (!this.lastLocation) {
-      this.lastLocation = location
+      this.lastLocation = this.location
       return
     }
 
     var diff = [
-      location[0] - this.lastLocation[0],
-      location[1] - this.lastLocation[1]
+      this.location[0] - this.lastLocation[0],
+      this.location[1] - this.lastLocation[1]
     ]
+
+    this.lastLocation = this.location
 
     return diff
   }

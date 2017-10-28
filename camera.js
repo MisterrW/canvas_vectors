@@ -1,4 +1,4 @@
-/* globals */
+/* globals Vector */
 
 var Camera = function (matrixOps, rotation, hud) {
   this.matrixOps = matrixOps
@@ -7,9 +7,9 @@ var Camera = function (matrixOps, rotation, hud) {
 
   // the transformation which defines the camera's location in world space
   this.cameraTransform = this.matrixOps.getIdentity4()
-  this.cameraTransform[2][3] = 1000
-  this.cameraTransform[1][3] = 500
   this.cameraTransform[0][3] = 500
+  this.cameraTransform[1][3] = -100
+  this.cameraTransform[2][3] = 2500
   // the transformation which gets you from world space to view space (inverse of the above)
   this.viewSpaceTransform = this.matrixOps.invert(this.cameraTransform)
 
