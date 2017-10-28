@@ -23,7 +23,7 @@ window.onkeydown = function (e) { this.activeKeys[e.keyCode] = true }
 var mainLoop = function (gameState, keyMovement, mouseMovement) {
   //mouseMovement.move(mousePosition, mouseIsDown)
   keyMovement.move(activeKeys)
-  gameState.spin()
+  gameState.doStuff()
   // render (take out of gameState, so it just returns objects to render)
   function nextFrame () {
     mainLoop(gameState, keyMovement, mouseMovement)
@@ -34,12 +34,13 @@ var mainLoop = function (gameState, keyMovement, mouseMovement) {
 }
 
 var startGame = function () {
+  var hud = new Hud()
   var matrixOps = new MatrixOperations()
   var rotation = new Rotation(matrixOps)
   var renderer = new Renderer()
   var projector = new Projector()
 
-  var camera = new Camera(matrixOps, rotation)
+  var camera = new Camera(matrixOps, rotation, hud)
   var mouseMovement = new MouseMovement(camera)
   var keyMovement = new KeyMovement(camera)
   var gameState = new GameState(rotation, renderer, projector, camera)

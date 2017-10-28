@@ -8,9 +8,18 @@
 
 </head>
 <body onmousedown=mouseDown() onmouseup=mouseUp() >
-  <canvas onmousemove="setMousePosition(event)" id="my3dCanvas" width="1000" height="600" style="border:1px solid #000000;"></canvas>
+  <canvas onmousemove="setMousePosition(event)" id="my3dCanvas" width="1920" height="1200" style="border:1px solid #000000; background-color: black"></canvas>
+  <div>
+    <p>Camera location</p>
+    <p>X: <span id="cam-loc-x"></span> Y: <span id="cam-loc-y"></span> Z: <span id="cam-loc-z"></span></p>
+    <p>Camera orientation</p>
+    <p>X: <span id="cam-or-x"></span> Y: <span id="cam-or-y"></span> Z: <span id="cam-or-z"></span></p>
+  </div>
   <canvas id="myCanvas" width="600" height="600" style="border:1px solid #000000;"></canvas>
 </body>
+
+<script src="hud.js"></script>
+<script src="vector.js"></script>
 <script src="mouseMovement.js"></script>
 <script src="keyMovement.js"></script>
 <script src="matrixOperations.js"></script>
@@ -19,6 +28,7 @@
 <script src="renderer.js"></script>
 <script src="projector.js"></script>
 <script src="camera.js"></script>
+<script src="tree.js"></script>
 <script src="gameState.js"></script>
 <script src="main.js"></script>
 </html>

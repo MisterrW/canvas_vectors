@@ -60,9 +60,9 @@ function flatWrite (endVector, startVector) {
 axes()
 flatWrite(vector1)
 
-// flatWrite(vectMatMul(twoDimIdentity, vector1));
-// flatWrite(vectMatMul(test1, vector1));
-// flatWrite(vectMatMul(test2, vector1));
+// flatWrite(arrVectMatMul(twoDimIdentity, vector1));
+// flatWrite(arrVectMatMul(test1, vector1));
+// flatWrite(arrVectMatMul(test2, vector1));
 
 var sqr = {
   tl: [1, 3],
@@ -81,17 +81,17 @@ function printSquare (tl, bl, tr, br) {
 printSquare(sqr.tl, sqr.bl, sqr.tr, sqr.br)
 
 var smlSqr = {
-  tl: matrixOps.vectMatMul(shrinker, sqr.tl),
-  tr: matrixOps.vectMatMul(shrinker, sqr.tr),
-  bl: matrixOps.vectMatMul(shrinker, sqr.bl),
-  br: matrixOps.vectMatMul(shrinker, sqr.br)
+  tl: matrixOps.arrVectMatMul(shrinker, sqr.tl),
+  tr: matrixOps.arrVectMatMul(shrinker, sqr.tr),
+  bl: matrixOps.arrVectMatMul(shrinker, sqr.bl),
+  br: matrixOps.arrVectMatMul(shrinker, sqr.br)
 }
 
 var slntSqr = {
-  tl: matrixOps.vectMatMul(slanter, sqr.tl),
-  tr: matrixOps.vectMatMul(slanter, sqr.tr),
-  bl: matrixOps.vectMatMul(slanter, sqr.bl),
-  br: matrixOps.vectMatMul(slanter, sqr.br)
+  tl: matrixOps.arrVectMatMul(slanter, sqr.tl),
+  tr: matrixOps.arrVectMatMul(slanter, sqr.tr),
+  bl: matrixOps.arrVectMatMul(slanter, sqr.bl),
+  br: matrixOps.arrVectMatMul(slanter, sqr.br)
 }
 
 printSquare(sqr.tl, sqr.bl, sqr.tr, sqr.br)

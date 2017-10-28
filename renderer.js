@@ -5,14 +5,14 @@
 var Renderer = function Renderer () {
   this.canvas = document.querySelector('#my3dCanvas')
   this.ctx = this.canvas.getContext('2d')
-  this.strokeStyle = 'black'
+  this.ctx.strokeStyle = 'white'
 }
 
 Renderer.prototype = {
   scaleVector: function scaleVector (vector) {
     var result = []
-    result[0] = 500 + (vector[0] * 300)
-    result[1] = 300 - (vector[1] * 300)
+    result[0] = 960 + (vector[0] * 300)
+    result[1] = 600 - (vector[1] * 300)
     return result
   },
 
@@ -33,7 +33,21 @@ Renderer.prototype = {
 
   preRender: function preRender () {
     this.ctx.beginPath()
-    this.ctx.clearRect(0, 0, 1000, 600)
+    this.ctx.clearRect(0, 0, 1920, 1200)
+  },
+
+  getRandomColor: function getRandomColor () {
+    var colors = ['white', 'green', 'grey', 'blue', 'red', 'yellow', 'orange', 'pink']
+    var n = Math.floor(Math.random() * colors.length)
+    return colors[n]
+  },
+
+  setWriteColor: function setWriteColor (color) {
+    this.ctx.strokeStyle = color
+  },
+
+  resetColor: function resetColor () {
+    this.ctx.strokeStyle = 'white'
   },
 
   writeFlattenedArray: function writeFlattenedArray (arr, noScale) {

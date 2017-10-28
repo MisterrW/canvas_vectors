@@ -11,9 +11,10 @@ var Rotation = function Rotation (matrixOps) {
       var cosA = Math.cos(a)
       var sinA = Math.sin(a)
       return [
-        [1, 0, 0],
-        [0, cosA, -sinA],
-        [0, sinA, cosA]
+        [1, 0, 0, 0],
+        [0, cosA, -sinA, 0],
+        [0, sinA, cosA, 0],
+        [0, 0, 0, 0]
       ]
     },
 
@@ -21,9 +22,10 @@ var Rotation = function Rotation (matrixOps) {
       var cosA = Math.cos(a)
       var sinA = Math.sin(a)
       return [
-        [cosA, 0, sinA],
-        [0, 1, 0],
-        [-sinA, 0, cosA]
+        [cosA, 0, sinA, 0],
+        [0, 1, 0, 0],
+        [-sinA, 0, cosA, 0],
+        [0, 0, 0, 0]
       ]
     },
 
@@ -31,9 +33,10 @@ var Rotation = function Rotation (matrixOps) {
       var cosA = Math.cos(a)
       var sinA = Math.sin(a)
       return [
-        [cosA, -sinA, 0],
-        [sinA, cosA, 0],
-        [0, 0, 1]
+        [cosA, -sinA, 0, 0],
+        [sinA, cosA, 0, 0],
+        [0, 0, 1, 0],
+        [0, 0, 0, 0]
       ]
     }
   }

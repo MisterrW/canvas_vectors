@@ -20,19 +20,19 @@ Projector.prototype = {
     var mapped = []
     for (var i = 0; i < arr.length; i++) {
       var point = arr[i]
-      if (point[2] > 0) {
+      if (point.z > 0) {
       // console.log("My distance from object: " + Az)
-        var Az = ml[2] - point[2]
+        var Az = ml[2] - point.z
         // console.log("My distance from camera: " + Bz)
         // var Bz = ml[2] - camLocation[2]
         var Bz = ml[2]
 
         // x
-        var Ax = point[0]
+        var Ax = point.x
         var Bx = Ax * (Bz / Az)
 
         // y
-        var Ay = point[1]
+        var Ay = point.y
         var By = Ay * (Bz / Az)
 
         mapped[i] = [Bx, By]
