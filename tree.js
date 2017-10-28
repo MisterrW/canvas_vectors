@@ -1,33 +1,34 @@
+/* globals Vector */
+
 /**
  * Generates a tree.
  */
 
- var branchCount;
+var branchCount
 function getBranch (tree, rootCoordinates, radius, maxLength, branchingFactor, spread, maxBranchingFactor) {
-  
-  if(branchCount < 100) {
+  if (branchCount < 100) {
   //   branchCount++
   // console.log(branchCount)
-  var branchEnd = [
-    rootCoordinates[0][0] + (-spread + (Math.random() * 2 * spread)),
-    rootCoordinates[0][1] + ((0.5 * maxLength) + (Math.random() * 0.5 * maxLength)),
-    rootCoordinates[0][2] + (-spread + (Math.random() * 2 * spread))
-  ]
-  var tipRadius = radius * 0.5
-  var tipCoordinates = [branchEnd, [branchEnd[0] + tipRadius, branchEnd[1], branchEnd[2]], [branchEnd[0], branchEnd[1], branchEnd[2] + tipRadius]]
-  tree.push(rootCoordinates.concat(tipCoordinates))
-  if (branchingFactor < maxBranchingFactor) {
-    for (var i = 0; i < branchingFactor; i++) {
-      tree = getBranch(tree, tipCoordinates, tipRadius, maxLength * 0.7, branchingFactor + 2, spread * 1.2, maxBranchingFactor)
+    var branchEnd = new Vector(
+      rootCoordinates[0]['x'] + (-spread + (Math.random() * 2 * spread)),
+      rootCoordinates[0]['y'] + ((0.5 * maxLength) + (Math.random() * 0.5 * maxLength)),
+      rootCoordinates[0]['z'] + (-spread + (Math.random() * 2 * spread))
+    )
+    var tipRadius = radius * 0.5
+    var tipCoordinates = [branchEnd, new Vector(branchEnd.x + tipRadius, branchEnd.y, branchEnd.z), new Vector(branchEnd.x, branchEnd.y, branchEnd.z + tipRadius)]
+    tree.push(rootCoordinates.concat(tipCoordinates))
+    if (branchingFactor < maxBranchingFactor) {
+      for (var i = 0; i < branchingFactor; i++) {
+        tree = getBranch(tree, tipCoordinates, tipRadius, maxLength * 0.7, branchingFactor + 2, spread * 1.2, maxBranchingFactor)
+      }
     }
   }
-}
   return tree
 }
 function getTree (root) {
   branchCount = 0
   var radius = 30
-  var rootCoordinates = [root, [root[0] + radius, root[1], root[2]], [root[0], root[1], root[2] + radius]]
+  var rootCoordinates = [root, new Vector(root.x + radius, root.y, root.z), new Vector(root.x, root.y, root.z + radius)]
   // var radius = maxHeight / 100
   var tree = []
   var trunkLength = 300 + (Math.random() * 30)

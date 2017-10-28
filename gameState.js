@@ -44,7 +44,7 @@ var GameState = function GameState (rotation, renderer, projector, camera) {
   this.trees = []
 
   for (i = 0; i < 5; i++) {
-    this.trees.push(getTree([-1000 + (Math.random() * 2000), -200, -600 + (Math.random() * 1200)]))
+    this.trees.push(getTree(new Vector(-1000 + (Math.random() * 2000), -200, -600 + (Math.random() * 1200))))
   }
 
   this.axes = [
@@ -58,9 +58,9 @@ var GameState = function GameState (rotation, renderer, projector, camera) {
   }
 
   this.stars = []
-  var starRadius = 10000
+  var starRadius = 100000
   var starCount = 5000
-  var starSize = 10
+  var starSize = 100
   for (i = 0; i < starCount; i++) {
     var l = -starRadius + Math.random() * 2 * starRadius
     var j = -starRadius + Math.random() * 2 * starRadius

@@ -34,12 +34,13 @@ var mainLoop = function (gameState, keyMovement, mouseMovement) {
 }
 
 var startGame = function () {
+  var hud = new Hud()
   var matrixOps = new MatrixOperations()
   var rotation = new Rotation(matrixOps)
   var renderer = new Renderer()
   var projector = new Projector()
 
-  var camera = new Camera(matrixOps, rotation)
+  var camera = new Camera(matrixOps, rotation, hud)
   var mouseMovement = new MouseMovement(camera)
   var keyMovement = new KeyMovement(camera)
   var gameState = new GameState(rotation, renderer, projector, camera)
