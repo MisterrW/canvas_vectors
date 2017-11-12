@@ -14,14 +14,14 @@ var Camera = function (matrixOps, rotation, hud) {
   this.viewSpaceTransform = this.matrixOps.invert(this.cameraTransform)
 
   // this.hud.updateOrientation(this.orientation[0], this.orientation[1], this.orientation[2])
-  this.hud.updateLocation(this.matrixOps.matMul(this.cameraTransform, new Vector(0, 0, 0)))
+  this.hud.updateLocation(this.matrixOps.vectMatMul(this.cameraTransform, new Vector(0, 0, 0)))
 }
 
 Camera.prototype = {
   /**
   * Before projecting scene, we need to account for the camera's orientation.
   * This method translates a collection of points mapped to 'world space' to a collection of (still 3D) points
-  * in a coordinate system with the camera at [0, 0, 0] and not rotated.
+  * in 'view space', a coordinate system with the camera at [0, 0, 0] and facing -z.
   */
   orientPointsArray: function orientPointsArray (pointsArray) {
     var transformedPoints = []
@@ -37,9 +37,6 @@ Camera.prototype = {
   move: function move (moveMatrix) {
     this.cameraTransform = this.matrixOps.matMul(this.cameraTransform, moveMatrix)
     this.viewSpaceTransform = this.matrixOps.invert(this.cameraTransform)
-    // console.log(this.cameraTransform)
-    // console.log(this.viewSpaceTransform)
-    // this.hud.updateLocation(this.cameraTransform )
     var pos = this.matrixOps.vectMatMul(this.cameraTransform, new Vector(0, 0, 0))
     this.hud.updateLocation(pos.x, pos.y, pos.z)
   }

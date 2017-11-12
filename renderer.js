@@ -11,8 +11,8 @@ var Renderer = function Renderer () {
 Renderer.prototype = {
   scaleVector: function scaleVector (vector) {
     var result = []
-    result[0] = 960 + (vector[0] * 300)
-    result[1] = 600 - (vector[1] * 300)
+    result[0] = 650 + (vector[0] * 300)
+    result[1] = 325 - (vector[1] * 300)
     return result
   },
 

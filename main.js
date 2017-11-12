@@ -44,7 +44,7 @@ var startGame = function () {
   var camera = new Camera(matrixOps, rotation, hud)
   var mouseMovement = new MouseMovement(camera)
   var keyMovement = new KeyMovement(camera, matrixOps, rotation, mouseMovement) // passing this in here for now, eventually create a movement class
-  var gameState = new GameState(rotation, renderer, projector, camera)
+  var gameState = new GameState(rotation, renderer, projector, camera, matrixOps)
   playing = true
   mainLoop(gameState, keyMovement, mouseMovement)
 }

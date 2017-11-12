@@ -1,11 +1,12 @@
 /* globals Vector getTree */
 
-var GameState = function GameState (rotation, renderer, projector, camera) {
+var GameState = function GameState (rotation, renderer, projector, camera, matrixOps) {
   var i, j
   this.rotation = rotation
   this.renderer = renderer
   this.projector = projector
   this.camera = camera
+  this.matrixOps = matrixOps
 
   var ctx = document.querySelector('#my3dCanvas').getContext('2d')
   var ctxCentre = [ctx.clientWidth / 2.0, ctx.clientHeight / 2.0]
@@ -15,6 +16,27 @@ var GameState = function GameState (rotation, renderer, projector, camera) {
     [[ctxCentre[0], 310], [ctxCentre[0], 320]],
     [[510, ctxCentre[1]], [520, ctxCentre[1]]]
   ]
+
+  var planetDiameter = 1274200000
+  var planetRadius = planetDiameter / 2.0
+  var planetCenter = new Vector(planetRadius, planetRadius, planetRadius)
+
+  this.planet = [
+    new Vector(-planetRadius, planetRadius, planetRadius, 1),
+    new Vector(planetRadius, planetRadius, planetRadius, 1),
+    new Vector(-planetRadius, -planetRadius, planetRadius, 1),
+    new Vector(planetRadius, -planetRadius, planetRadius, 1),
+    new Vector(-planetRadius, planetRadius, -planetRadius, 1),
+    new Vector(planetRadius, planetRadius, -planetRadius, 1),
+    new Vector(-planetRadius, -planetRadius, -planetRadius, 1),
+    new Vector(planetRadius, -planetRadius, -planetRadius, 1)
+  ]
+
+  for (i = 0; i < this.planet.length; i++) {
+    this.planet[i] = this.matrixOps.vectAdd(this.planet[i], planetCenter)
+  }
+
+ console.log(this.planet)
 
   this.cube = {
   // point: [x, y, z]
@@ -89,7 +111,8 @@ var GameState = function GameState (rotation, renderer, projector, camera) {
     }
   }
 
-  this.stars = []
+  this.stars1 = []
+  this.stars2 = []
   var starRadius = 100000
   var starCount = 5000
   var starSize = 100
@@ -97,7 +120,17 @@ var GameState = function GameState (rotation, renderer, projector, camera) {
     var sx = -starRadius + Math.random() * 2 * starRadius
     var sy = -starRadius + Math.random() * 2 * starRadius
     var sz = -starRadius + Math.random() * 2 * starRadius
-    this.stars.push([new Vector(sx, sy, sz, 1), new Vector(sx + Math.random() * starSize, sy + Math.random() * starSize, sz + Math.random() * starSize, 1)])
+    this.stars1.push([new Vector(sx, sy, sz, 1), new Vector(sx + Math.random() * starSize, sy + Math.random() * starSize, sz + Math.random() * starSize, 1)])
+  }
+
+  starRadius = 2000
+  starCount = 3000
+  starSize = 3
+  for (i = 0; i < starCount; i++) {
+    var sx = (-starRadius + Math.random() * 2 * starRadius) + axisXOffset
+    var sy = -starRadius + Math.random() * 2 * starRadius
+    var sz = -starRadius + Math.random() * 2 * starRadius
+    this.stars2.push([new Vector(sx, sy, sz, 1), new Vector(sx + Math.random() * starSize, sy + Math.random() * starSize, sz + Math.random() * starSize, 1)])
   }
 
   this.wall = []
@@ -148,12 +181,12 @@ GameState.prototype = {
   },
 
   starsFall: function starsFall () {
-    for (var i = 0; i < this.stars.length; i++) {
-      var drop = (200 * Math.random()) - 250
+    for (var i = 0; i < this.stars2.length; i++) {
+      var drop = (4 * Math.random()) - 2
       var axes = ['x', 'y', 'z']
       var ax = axes[Math.floor(Math.random() * 3)]
-      this.stars[i][0][ax] += drop
-      this.stars[i][1][ax] += drop
+      this.stars2[i][0][ax] += drop
+      this.stars2[i][1][ax] += drop
     }
   },
 
@@ -170,8 +203,15 @@ GameState.prototype = {
     for (i = 0; i < this.axes.length; i++) {
       threeDObjectsThisFrame.push(this.axes[i])
     }
-    for (i = 0; i < this.stars.length; i++) {
-      threeDObjectsThisFrame.push(this.stars[i])
+    for (i = 0; i < this.stars1.length; i++) {
+      threeDObjectsThisFrame.push(this.stars1[i])
+    }
+
+    for (i = 0; i < this.stars2.length; i++) {
+      threeDObjectsThisFrame.push(this.stars2[i])
+    }
+    for (i = 0; i < this.planet.length; i++) {
+      threeDObjectsThisFrame.push(this.planet[i])
     }
     for (i = 0; i < this.axisLabels.length; i++) {
       threeDObjectsThisFrame.push(this.axisLabels[i])
@@ -185,7 +225,6 @@ GameState.prototype = {
     for (i = 0; i < this.trees.length; i++) {
       this.renderer.setWriteColor(this.getRandomGrey())
       for (var j = 0; j < this.trees[i].length; j++) {
-        // threeDObjectsThisFrame.push(this.trees[i][j])
         this.renderer.writeFlattenedArray(this.projector.mapPointsArrToPlane(this.camera.orientPointsArray(this.trees[i][j])))
       }
     }
@@ -203,7 +242,7 @@ GameState.prototype = {
   },
 
   doStuff: function doStuff () {
-    // this.starsFall()
+    this.starsFall()
     this.spin()
   }
 }

@@ -8,11 +8,12 @@ var KeyMovement = function (camera, matrixOps, rotation, mouseMovement) {
   this.matrixOps = matrixOps
   this.rotation = rotation
   this.mouseMovement = mouseMovement
-  this.residualOX = 0
+  this.residualOX = -0.02
   this.residualOZ = 0
+  this.residualOY = 0
 
   this.residualMX = 0
-  this.residualMY = 0
+  this.residualMY = 10
   this.residualMZ = 0
 }
 
@@ -30,7 +31,7 @@ KeyMovement.prototype = {
     } else {
       orientX = this.residualOX
     }
-    this.residualOX = orientX * 0.9
+
     // bank left / right (yaw)
     if (activeKeys[186]) {
       orientZ = -0.015
@@ -39,13 +40,16 @@ KeyMovement.prototype = {
     } else {
       orientZ = this.residualOZ
     }
-    this.residualOZ = orientZ * 0.9
+
     var mouseChange = this.mouseMovement.get()
     if (mouseChange) {
-      console.log(mouseChange)
       orientX += mouseChange[1] / 500
-      orientZ += mouseChange[0] / 500
+      orientY += mouseChange[0] / 500
     }
+
+    this.residualOX = orientX * 0.9
+    this.residualOY = orientY * 0.9
+    this.residualOZ = orientZ * 0.9
 
     var orientMatrix = this.rotation.getXYZRotMat(orientX, orientY, orientZ)
 

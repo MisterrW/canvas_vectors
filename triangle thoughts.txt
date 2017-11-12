@@ -1,0 +1,8 @@
+Defining a triangle to be filled.
+
+It has 3 vertices.
+It has 3 sides connecting the vertices.
+All the vertices, and all the sides, lie on one plane.
+It has two faces, and which one is visible depends on which side of the plane you are on.
+It is not transparent - things behind it are hidden.
+
