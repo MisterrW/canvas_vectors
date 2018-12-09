@@ -3,6 +3,9 @@
    #my3dCanvas {
      background-color: white;
    }
+   #bold {
+     font-weight: bold;
+   }
 </style>
 <head>
 
@@ -11,8 +14,8 @@
   <canvas onmousemove="setMousePosition(event)" id="my3dCanvas" width="1100" height="650" style="border:1px solid #000000; background-color: black"></canvas>
   <div>
   <p>No 3d libraries, it's a 2d canvas. Trees are random (refresh the page a few times)</p>
-  <p>Controls: W forward, D backward, X up, C down. K + ; roll l/y, O + L pitch.</p>
-  <p>To stop dead (full stop), press... full stop.</p>
+  <p>Controls: <strong>W</strong> forward, <strong>D</strong> backward, <strong>X</strong> up, <strong>C</strong> down. <strong>K</strong> roll left, <strong>;</strong> roll right, <strong>O</strong> pitch up, <strong>L</strong> pitch down.</p>
+  <p>To stop dead (full stop), press... <strong>full stop.</strong></p>
 </div>
   <div>
     <p>Camera location: X <span id="cam-loc-x"></span>, Y <span id="cam-loc-y"></span>, Z <span id="cam-loc-z"></span></p>
