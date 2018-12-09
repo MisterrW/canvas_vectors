@@ -11,24 +11,22 @@ var Renderer = function Renderer () {
 Renderer.prototype = {
   scaleVector: function scaleVector (vector) {
     var result = []
-    result[0] = 960 + (vector[0] * 300)
-    result[1] = 600 - (vector[1] * 300)
+    result[0] = 650 + (vector[0] * 300)
+    result[1] = 325 - (vector[1] * 300)
     return result
+  },
+
+  getScaledArray: function getScaledArray(arr) {
+    for(let i = 0; i < arr.length; i++) { 
+      arr[i] = this.scaleVector(arr[i])
+    }
+    return arr
   },
 
   write: function write (endVector, startVector, noScale) {
     startVector = startVector || [0, 0]
-    var scaledStart
-    var scaledEnd
-    if (!noScale) {
-      scaledStart = this.scaleVector(startVector)
-      scaledEnd = this.scaleVector(endVector)
-    } else {
-      scaledStart = startVector
-      scaledEnd = endVector
-    }
-    this.ctx.moveTo(scaledStart[0], scaledStart[1])
-    this.ctx.lineTo(scaledEnd[0], scaledEnd[1])
+    this.ctx.moveTo(startVector[0], startVector[1])
+    this.ctx.lineTo(endVector[0], endVector[1])
   },
 
   preRender: function preRender () {
@@ -50,13 +48,29 @@ Renderer.prototype = {
     this.ctx.strokeStyle = 'white'
   },
 
+  // todo this is insanely inefficient because it joins every point to every other point
   writeFlattenedArray: function writeFlattenedArray (arr, noScale) {
+    if (!noScale) {
+      arr = this.getScaledArray(arr)
+    }
+
     for (var i = 0; i < arr.length; i++) {
-      for (var j = 0; j < arr.length; j++) {
-        if (arr[i] !== 'NORENDER' && arr[j] !== 'NORENDER' && i !== j) {
-          this.write(arr[i], arr[j], noScale)
+      for (var j = i; j < arr.length; j++) {
+        if (i !== j) {
+          this.write(arr[i], arr[j])
         }
       }
+    }
+  },
+
+  writeFlattenedArrayLite: function writeFlattenedArrayLite (arr, noScale) {
+    arr = this.getScaledArray(arr)
+    
+    for (var i = 0; i < arr.length-1; i++) {
+      this.write(arr[i], arr[i+1], noScale)
+    }
+    if(arr.length > 2){
+        this.write(arr[arr.length-1], arr[0], noScale)
     }
   },
 

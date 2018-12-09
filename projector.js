@@ -13,14 +13,12 @@ Projector.prototype = {
 // Az = distance of point A from viewer (in the z axis)
 
   mapPointsArrToPlane: function mapPointsArrToPlane (arr) {
-  // var ml = myLocation
-
   // 'my location ' after the transform to a coord system with the camera at 0 and not rotated
     var ml = [0, 0, 2]
     var mapped = []
     for (var i = 0; i < arr.length; i++) {
       var point = arr[i]
-      if (point.z > 0) {
+      if (point.z < 0) {
       // console.log("My distance from object: " + Az)
         var Az = ml[2] - point.z
         // console.log("My distance from camera: " + Bz)
@@ -35,9 +33,9 @@ Projector.prototype = {
         var Ay = point.y
         var By = Ay * (Bz / Az)
 
-        mapped[i] = [Bx, By]
+        mapped.push([Bx, By])
       } else {
-        mapped[i] = 'NORENDER'
+        // mapped[i] = 'NORENDER'
       }
     }
     return mapped

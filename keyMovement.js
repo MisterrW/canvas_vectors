@@ -1,51 +1,130 @@
-/* globals Vector */
+/* globals */
 
 /**
 * Keys movement
 */
-var KeyMovement = function (camera) {
+var KeyMovement = function (camera, matrixOps, rotation, mouseMovement) {
   this.camera = camera
+  this.matrixOps = matrixOps
+  this.rotation = rotation
+  this.mouseMovement = mouseMovement
+  this.residualOX = -0.02 // set an initial move
+  this.residualOZ = 0
+  this.residualOY = 0
+
+  this.residualMX = 0
+  this.residualMY = 2.5 // set an initial move
+  this.residualMZ = 0
+  this.lookScale = 1
+  this.moveScale = 2
 }
 
 KeyMovement.prototype = {
   move: function move (activeKeys) {
+    // full stop === full stop
+    if(activeKeys[190]) {
+      this.residualOX = 0
+      this.residualOZ = 0
+      this.residualOY = 0
+    
+      this.residualMX = 0
+      this.residualMY = 0
+      this.residualMZ = 0
+    }
+
     // using keys for look for now as well
-    var orientVect = [0, 0, 0]
+    var orientX = 0
+    var orientY = 0
+    var orientZ = 0
     // look up / down
     if (activeKeys[76]) {
-      orientVect[0] = 0.01
+      orientX = -0.015 * this.lookScale
     } else if (activeKeys[79]) {
-      orientVect[0] = -0.01
+      orientX = +0.015 * this.lookScale
+    } else {
+      orientX = this.residualOX
     }
+
     // bank left / right (yaw)
     if (activeKeys[186]) {
-      orientVect[2] = 0.03
+      orientZ = -0.015 * this.lookScale
     } else if (activeKeys[75]) {
-      orientVect[2] = -0.03
+      orientZ = +0.015 * this.lookScale
+    } else {
+      orientZ = this.residualOZ
     }
-    if (orientVect[0] !== 0 || orientVect[1] !== 0 || orientVect[2] !== 0) { this.camera.reorient(new Vector(orientVect[0], orientVect[1], orientVect[2])) }
+
+    var mouseChange = this.mouseMovement.get()
+    if (mouseChange) {
+      orientX += mouseChange[1] / 500
+      orientY += mouseChange[0] / 500
+    }
+
+    this.residualOX = orientX * 0.9
+    this.residualOY = orientY * 0.9
+    this.residualOZ = orientZ * 0.9
+
+    var orientMatrix = this.rotation.getXYZRotMat(orientX, orientY, orientZ)
+
+    var topSpeed = 50
 
     // keys control camera position
-    // this kind of works, but it moves the camera location relative to the 'real' axes, not camera orientation - need another transformation
-    var moveVectArr = [0, 0, 0]
+    var moveMatrix = this.matrixOps.getIdentity4()
     // forward (w s)
     if (activeKeys[87]) {
-      moveVectArr[2] = -10
+      moveMatrix[2][3] = -3 * this.moveScale
     } else if (activeKeys[83]) {
-      moveVectArr[2] = 10
+      moveMatrix[2][3] = 3 * this.moveScale
+    } else {
+      moveMatrix[2][3] = 0
     }
+    moveMatrix[2][3] += this.residualMZ
+
+    if(moveMatrix[2][3] > 0) {
+      moveMatrix[2][3] = Math.min( moveMatrix[2][3], topSpeed)
+    } else {
+      moveMatrix[2][3] = Math.max( moveMatrix[2][3], -topSpeed)
+    }
+
+    this.residualMZ = moveMatrix[2][3] * 0.9995
+
     // sideways (a d)
     if (activeKeys[65]) {
-      moveVectArr[0] = -5
+      moveMatrix[0][3] = -2 * this.moveScale
     } else if (activeKeys[68]) {
-      moveVectArr[0] = 5
+      moveMatrix[0][3] = 2 * this.moveScale
+    } else {
+      moveMatrix[0][3] = 0
     }
+    moveMatrix[0][3] += this.residualMX
+
+    if(moveMatrix[0][3] > 0) {
+      moveMatrix[0][3] = Math.min( moveMatrix[0][3], topSpeed)
+    } else {
+      moveMatrix[0][3] = Math.max( moveMatrix[0][3], -topSpeed)
+    }
+
+    this.residualMX = moveMatrix[0][3] * 0.9995
+
     // up/down (x c)
     if (activeKeys[88]) {
-      moveVectArr[1] = 5
+      moveMatrix[1][3] = 2 * this.moveScale
     } else if (activeKeys[67]) {
-      moveVectArr[1] = -5
+      moveMatrix[1][3] = -2 * this.moveScale
+    } else {
+      moveMatrix[1][3] = 0
     }
-    if (moveVectArr[0] !== 0 || moveVectArr[1] !== 0 || moveVectArr[2] !== 0) { this.camera.move(new Vector(moveVectArr[0], moveVectArr[1], moveVectArr[2])) }
+    moveMatrix[1][3] += this.residualMY
+
+    if(moveMatrix[1][3] > 0) {
+      moveMatrix[1][3] = Math.min( moveMatrix[1][3], topSpeed)
+    } else {
+      moveMatrix[1][3] = Math.max( moveMatrix[1][3], -topSpeed)
+    }
+
+    this.residualMY = moveMatrix[1][3] * 0.9995
+
+    var positionMatrix = this.matrixOps.matMul(moveMatrix, orientMatrix)
+    this.camera.move(positionMatrix)
   }
 }

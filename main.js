@@ -1,4 +1,4 @@
-/* globals Camera KeyMovement MouseMovement MatrixOperations GameState Rotation Renderer Projector */
+/* globals Hud Camera KeyMovement MouseMovement MatrixOperations GameState Rotation Renderer Projector */
 
 var playing = false
 
@@ -21,7 +21,8 @@ window.onkeyup = function (e) { this.activeKeys[e.keyCode] = false }
 window.onkeydown = function (e) { this.activeKeys[e.keyCode] = true }
 
 var mainLoop = function (gameState, keyMovement, mouseMovement) {
-  //mouseMovement.move(mousePosition, mouseIsDown)
+  mouseMovement.mouseDown = mouseIsDown
+  mouseMovement.location = mousePosition
   keyMovement.move(activeKeys)
   gameState.doStuff()
   // render (take out of gameState, so it just returns objects to render)
@@ -42,8 +43,8 @@ var startGame = function () {
 
   var camera = new Camera(matrixOps, rotation, hud)
   var mouseMovement = new MouseMovement(camera)
-  var keyMovement = new KeyMovement(camera)
-  var gameState = new GameState(rotation, renderer, projector, camera)
+  var keyMovement = new KeyMovement(camera, matrixOps, rotation, mouseMovement) // passing this in here for now, eventually create a movement class
+  var gameState = new GameState(rotation, renderer, projector, camera, matrixOps)
   playing = true
   mainLoop(gameState, keyMovement, mouseMovement)
 }
