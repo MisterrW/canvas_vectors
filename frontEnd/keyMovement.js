@@ -8,13 +8,13 @@ var KeyMovement = function (camera, matrixOps, rotation, mouseMovement) {
   this.matrixOps = matrixOps
   this.rotation = rotation
   this.mouseMovement = mouseMovement
-  this.residualOX = -0.02 // set an initial move
+  this.residualOX = -0.015 // set an initial move
   this.residualOZ = 0
   this.residualOY = 0
 
   this.residualMX = 0
-  this.residualMY = 2.5 // set an initial move
-  this.residualMZ = 0
+  this.residualMY = 1.5 // set an initial move
+  this.residualMZ = 1.5
   this.lookScale = 1
   this.moveScale = 2
 }
