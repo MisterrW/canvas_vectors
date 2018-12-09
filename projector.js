@@ -33,9 +33,9 @@ Projector.prototype = {
         var Ay = point.y
         var By = Ay * (Bz / Az)
 
-        mapped[i] = [Bx, By]
+        mapped.push([Bx, By])
       } else {
-        mapped[i] = 'NORENDER'
+        // mapped[i] = 'NORENDER'
       }
     }
     return mapped

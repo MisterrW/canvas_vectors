@@ -8,35 +8,48 @@ var KeyMovement = function (camera, matrixOps, rotation, mouseMovement) {
   this.matrixOps = matrixOps
   this.rotation = rotation
   this.mouseMovement = mouseMovement
-  this.residualOX = -0.02
+  this.residualOX = -0.02 // set an initial move
   this.residualOZ = 0
   this.residualOY = 0
 
   this.residualMX = 0
-  this.residualMY = 10
+  this.residualMY = 10 // set an initial move
   this.residualMZ = 0
+  this.lookScale = 1
+  this.moveScale = 2
 }
 
 KeyMovement.prototype = {
   move: function move (activeKeys) {
+    // full stop === full stop
+    if(activeKeys[190]) {
+      this.residualOX = 0
+      this.residualOZ = 0
+      this.residualOY = 0
+    
+      this.residualMX = 0
+      this.residualMY = 0
+      this.residualMZ = 0
+    }
+
     // using keys for look for now as well
     var orientX = 0
     var orientY = 0
     var orientZ = 0
     // look up / down
     if (activeKeys[76]) {
-      orientX = -0.015
+      orientX = -0.015 * this.lookScale
     } else if (activeKeys[79]) {
-      orientX = +0.015
+      orientX = +0.015 * this.lookScale
     } else {
       orientX = this.residualOX
     }
 
     // bank left / right (yaw)
     if (activeKeys[186]) {
-      orientZ = -0.015
+      orientZ = -0.015 * this.lookScale
     } else if (activeKeys[75]) {
-      orientZ = +0.015
+      orientZ = +0.015 * this.lookScale
     } else {
       orientZ = this.residualOZ
     }
@@ -57,9 +70,9 @@ KeyMovement.prototype = {
     var moveMatrix = this.matrixOps.getIdentity4()
     // forward (w s)
     if (activeKeys[87]) {
-      moveMatrix[2][3] = -10
+      moveMatrix[2][3] = -10 * this.moveScale
     } else if (activeKeys[83]) {
-      moveMatrix[2][3] = 10
+      moveMatrix[2][3] = 10 * this.moveScale
     } else {
       moveMatrix[2][3] = this.residualMZ
     }
@@ -67,9 +80,9 @@ KeyMovement.prototype = {
 
     // sideways (a d)
     if (activeKeys[65]) {
-      moveMatrix[0][3] = -5
+      moveMatrix[0][3] = -5 * this.moveScale
     } else if (activeKeys[68]) {
-      moveMatrix[0][3] = 5
+      moveMatrix[0][3] = 5 * this.moveScale
     } else {
       moveMatrix[0][3] = this.residualMX
     }
@@ -77,9 +90,9 @@ KeyMovement.prototype = {
 
     // up/down (x c)
     if (activeKeys[88]) {
-      moveMatrix[1][3] = 5
+      moveMatrix[1][3] = 5 * this.moveScale
     } else if (activeKeys[67]) {
-      moveMatrix[1][3] = -5
+      moveMatrix[1][3] = -5 * this.moveScale
     } else {
       moveMatrix[1][3] = this.residualMY
     }

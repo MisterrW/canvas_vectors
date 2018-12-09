@@ -7,6 +7,8 @@ var GameState = function GameState (rotation, renderer, projector, camera, matri
   this.projector = projector
   this.camera = camera
   this.matrixOps = matrixOps
+  
+  this.fallenStars = {}
 
   var ctx = document.querySelector('#my3dCanvas').getContext('2d')
   var ctxCentre = [ctx.clientWidth / 2.0, ctx.clientHeight / 2.0]
@@ -67,7 +69,7 @@ var GameState = function GameState (rotation, renderer, projector, camera, matri
 
   this.trees = []
 
-  for (i = 0; i < 5; i++) {
+  for (i = 0; i < 7; i++) {
     this.trees.push(getTree(new Vector(-1000 + (Math.random() * 2000), -200, -600 + (Math.random() * 1200))))
   }
 
@@ -123,12 +125,13 @@ var GameState = function GameState (rotation, renderer, projector, camera, matri
     this.stars1.push([new Vector(sx, sy, sz, 1), new Vector(sx + Math.random() * starSize, sy + Math.random() * starSize, sz + Math.random() * starSize, 1)])
   }
 
+  let stars2yAxisOffset = 2000 - 200
   starRadius = 2000
-  starCount = 3000
-  starSize = 3
+  starCount = 7000
+  starSize = 2.5
   for (i = 0; i < starCount; i++) {
-    var sx = (-starRadius + Math.random() * 2 * starRadius) + axisXOffset
-    var sy = -starRadius + Math.random() * 2 * starRadius
+    var sx = (-starRadius + Math.random() * 2 * starRadius)
+    var sy = (-starRadius + Math.random() * 2 * starRadius) + stars2yAxisOffset
     var sz = -starRadius + Math.random() * 2 * starRadius
     this.stars2.push([new Vector(sx, sy, sz, 1), new Vector(sx + Math.random() * starSize, sy + Math.random() * starSize, sz + Math.random() * starSize, 1)])
   }
@@ -180,19 +183,35 @@ GameState.prototype = {
     return this.rotation.translateAllPointsRotateAndTranslateBack(newObj, centre, angle + 9, angle + 10, angle + 15)
   },
 
+
   starsFall: function starsFall () {
     for (var i = 0; i < this.stars2.length; i++) {
-      var drop = (4 * Math.random()) - 2
-      var axes = ['x', 'y', 'z']
-      var ax = axes[Math.floor(Math.random() * 3)]
-      this.stars2[i][0][ax] += drop
-      this.stars2[i][1][ax] += drop
+      if (!this.fallenStars[i]) {
+        if (this.stars2[i][0]['y'] > -200) { 
+          var drop = -20 + (20 * Math.random())
+          // var drop = (4 * Math.random()) - 2
+          var axes = ['x', 'y', 'z']
+          var ax = axes[1]
+          // var ax = axes[Math.floor(Math.random() * 3)]
+
+          this.stars2[i][0][ax] += drop
+          this.stars2[i][1][ax] += drop
+        } else {
+          if(Math.random() > 0.3) {
+            this.stars2[i][0]['y'] += 4000
+            this.stars2[i][1]['y'] += 4000
+          } else {
+            this.fallenStars[i] = true
+          }
+        }
+      }
     }
   },
 
   spin: function spin () {
     var i
     var threeDObjectsThisFrame = []
+    var threeDObjectsThisFrameLite = []
     var twoDObjectsThisFrame = []
     var angle = this.stillGoing % 360.0
     threeDObjectsThisFrame.push(this.rotation.rotateObjectAllAxes(this.cubeArray, angle, angle, angle))
@@ -204,15 +223,15 @@ GameState.prototype = {
       threeDObjectsThisFrame.push(this.axes[i])
     }
     for (i = 0; i < this.stars1.length; i++) {
-      threeDObjectsThisFrame.push(this.stars1[i])
+      threeDObjectsThisFrameLite.push(this.stars1[i])
     }
 
     for (i = 0; i < this.stars2.length; i++) {
-      threeDObjectsThisFrame.push(this.stars2[i])
+      threeDObjectsThisFrameLite.push(this.stars2[i])
     }
-    for (i = 0; i < this.planet.length; i++) {
-      threeDObjectsThisFrame.push(this.planet[i])
-    }
+    //for (i = 0; i < this.planet.length; i++) {
+    //  threeDObjectsThisFrameLite.push(this.planet[i])
+    //}
     for (i = 0; i < this.axisLabels.length; i++) {
       threeDObjectsThisFrame.push(this.axisLabels[i])
     }
@@ -225,12 +244,20 @@ GameState.prototype = {
     for (i = 0; i < this.trees.length; i++) {
       this.renderer.setWriteColor(this.getRandomGrey())
       for (var j = 0; j < this.trees[i].length; j++) {
-        this.renderer.writeFlattenedArray(this.projector.mapPointsArrToPlane(this.camera.orientPointsArray(this.trees[i][j])))
+        var mappedPoints = this.projector.mapPointsArrToPlane(this.camera.orientPointsArray(this.trees[i][j]));
+        if (j < 3) {
+            this.renderer.writeFlattenedArray(mappedPoints)
+        } else {
+          this.renderer.writeFlattenedArrayLite(mappedPoints)
+        }
       }
     }
     this.renderer.resetColor()
     for (i = 0; i < threeDObjectsThisFrame.length; i++) {
       this.renderer.writeFlattenedArray(this.projector.mapPointsArrToPlane(this.camera.orientPointsArray(threeDObjectsThisFrame[i])))
+    }
+    for (i = 0; i < threeDObjectsThisFrameLite.length; i++) {
+      this.renderer.writeFlattenedArrayLite(this.projector.mapPointsArrToPlane(this.camera.orientPointsArray(threeDObjectsThisFrameLite[i])))
     }
     this.renderer.writeFlattenedArray([[345, 300], [453, 300]])
     for (i = 0; i < twoDObjectsThisFrame.length; i++) {

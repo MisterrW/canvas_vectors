@@ -10,10 +10,14 @@
 <body onmousedown=mouseDown() onmouseup=mouseUp() >
   <canvas onmousemove="setMousePosition(event)" id="my3dCanvas" width="1100" height="650" style="border:1px solid #000000; background-color: black"></canvas>
   <div>
-    <p>Camera location</p>
-    <p>X: <span id="cam-loc-x"></span> Y: <span id="cam-loc-y"></span> Z: <span id="cam-loc-z"></span></p>
-    <p>Camera orientation</p>
-    <p>X: <span id="cam-or-x"></span> Y: <span id="cam-or-y"></span> Z: <span id="cam-or-z"></span></p>
+  <p>No 3d libraries, it's a 2d canvas. Trees are random (refresh the page a few times)</p>
+  <p>Controls: W forward, D backward, X up, C down. K + ; roll l/y, O + L pitch.</p>
+  <p>To stop dead (full stop), press... full stop.</p>
+</div>
+  <div>
+    <p>Camera location: X <span id="cam-loc-x"></span>, Y <span id="cam-loc-y"></span>, Z <span id="cam-loc-z"></span></p>
+    <!-- <p>Camera orientation</p> -->
+    <!-- <p>X: <span id="cam-or-x"></span> Y: <span id="cam-or-y"></span> Z: <span id="cam-or-z"></span></p> -->
   </div>
   <canvas id="myCanvas" width="600" height="600" style="border:1px solid #000000;"></canvas>
 </body>
