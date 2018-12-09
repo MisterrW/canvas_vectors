@@ -2,6 +2,7 @@ Space:
 - rewrite all matrix operations to use 4x4 matrices with homogenous coordinates
 - redefine camera orientation to use matrices not just angles
 - rewrite projection and view-space mapping to use 4-matrices
+- port over gravity and collision detection from the openGL project to enable 'landing'
 
 Polygons:
 - polygons
