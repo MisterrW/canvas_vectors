@@ -17,19 +17,36 @@ var KeyMovement = function (camera, matrixOps, rotation, mouseMovement) {
   this.residualMZ = 1.5
   this.lookScale = 1
   this.moveScale = 2
+
+  this.braking = false;
 }
 
 KeyMovement.prototype = {
   move: function move (activeKeys) {
+
+    if (this.braking === true) {
+      let moveKeysKeys = Object.keys(activeKeys);
+      for(let i = 0; i < moveKeysKeys.length; i++) {
+        if (moveKeysKeys[i] !== '190' && activeKeys[moveKeysKeys[i]]) {
+          this.braking = false;
+          break;
+        }
+      }
+    }
+
     // full stop === full stop
-    if(activeKeys[190]) {
-      this.residualOX = 0
-      this.residualOZ = 0
-      this.residualOY = 0
+    if (activeKeys[190]) {
+      this.braking = true;
+    }
+
+    if (this.braking) {
+      this.residualOX *= 0.9
+      this.residualOZ *= 0.9
+      this.residualOY *= 0.9
     
-      this.residualMX = 0
-      this.residualMY = 0
-      this.residualMZ = 0
+      this.residualMX *= 0.9
+      this.residualMY *= 0.9
+      this.residualMZ *= 0.9
     }
 
     // using keys for look for now as well
