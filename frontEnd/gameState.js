@@ -8,7 +8,7 @@ var GameState = function GameState (rotation, renderer, projector, camera, matri
   this.camera = camera
   this.matrixOps = matrixOps
   
-  this.fallenStars = {}
+  this.fallenFlakes = {}
 
   // var ctx = document.querySelector('#my3dCanvas').getContext('2d')
   // var ctxCentre = [ctx.clientWidth / 2.0, ctx.clientHeight / 2.0]
@@ -129,7 +129,7 @@ var GameState = function GameState (rotation, renderer, projector, camera, matri
   }
 
   this.stars1 = []
-  this.stars2 = []
+  this.snow = []
   var starRadius = 100000
   var starCount = 5000
   var starSize = 100
@@ -148,7 +148,7 @@ var GameState = function GameState (rotation, renderer, projector, camera, matri
     var sx = (-starRadius + Math.random() * 2 * starRadius)
     var sy = (-starRadius + Math.random() * 2 * starRadius) + stars2yAxisOffset
     var sz = -starRadius + Math.random() * 2 * starRadius
-    this.stars2.push([new Vector(sx, sy, sz, 1), new Vector(sx + Math.random() * starSize, sy + Math.random() * starSize, sz + Math.random() * starSize, 1)])
+    this.snow.push([new Vector(sx, sy, sz, 1), new Vector(sx + Math.random() * starSize, sy + Math.random() * starSize, sz + Math.random() * starSize, 1)])
   }
 
   this.wall = []
@@ -192,24 +192,24 @@ GameState.prototype = {
   },
 
 
-  starsFall: function starsFall () {
-    for (var i = 0; i < this.stars2.length; i++) {
-      if (!this.fallenStars[i]) {
-        if (this.stars2[i][0]['y'] > -200) { 
+  snowFall: function snowFall () {
+    for (var i = 0; i < this.snow.length; i++) {
+      if (!this.fallenFlakes[i]) {
+        if (this.snow[i][0]['y'] > -200) { 
           var drop = -20 + (20 * Math.random())
           // var drop = (4 * Math.random()) - 2
           var axes = ['x', 'y', 'z']
           var ax = axes[1]
           // var ax = axes[Math.floor(Math.random() * 3)]
 
-          this.stars2[i][0][ax] += drop
-          this.stars2[i][1][ax] += drop
+          this.snow[i][0][ax] += drop
+          this.snow[i][1][ax] += drop
         } else {
           if(Math.random() > 0.3) {
-            this.stars2[i][0]['y'] += 4000
-            this.stars2[i][1]['y'] += 4000
+            this.snow[i][0]['y'] += 4000
+            this.snow[i][1]['y'] += 4000
           } else {
-            this.fallenStars[i] = true
+            this.fallenFlakes[i] = true
           }
         }
       }
@@ -238,8 +238,8 @@ GameState.prototype = {
       threeDObjectsThisFrameLite.push(this.stars1[i])
     }
 
-    for (i = 0; i < this.stars2.length; i++) {
-      threeDObjectsThisFrameLite.push(this.stars2[i])
+    for (i = 0; i < this.snow.length; i++) {
+      threeDObjectsThisFrameLite.push(this.snow[i])
     }
     //for (i = 0; i < this.planet.length; i++) {
     //  threeDObjectsThisFrameLite.push(this.planet[i])
@@ -281,7 +281,7 @@ GameState.prototype = {
   },
 
   doStuff: function doStuff () {
-    this.starsFall()
+    this.snowFall()
     this.spin()
   }
 }
