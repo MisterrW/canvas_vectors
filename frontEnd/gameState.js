@@ -10,37 +10,37 @@ var GameState = function GameState (rotation, renderer, projector, camera, matri
   
   this.fallenStars = {}
 
-  var ctx = document.querySelector('#my3dCanvas').getContext('2d')
-  var ctxCentre = [ctx.clientWidth / 2.0, ctx.clientHeight / 2.0]
-  this.crosshair = [
-    [[ctxCentre[0], 280], [ctxCentre[0], 290]],
-    [[480, ctxCentre[1]], [490, ctxCentre[1]]],
-    [[ctxCentre[0], 310], [ctxCentre[0], 320]],
-    [[510, ctxCentre[1]], [520, ctxCentre[1]]]
-  ]
+  // var ctx = document.querySelector('#my3dCanvas').getContext('2d')
+  // var ctxCentre = [ctx.clientWidth / 2.0, ctx.clientHeight / 2.0]
+  // this.crosshair = [
+  //   [[ctxCentre[0], 280], [ctxCentre[0], 290]],
+  //   [[480, ctxCentre[1]], [490, ctxCentre[1]]],
+  //   [[ctxCentre[0], 310], [ctxCentre[0], 320]],
+  //   [[510, ctxCentre[1]], [520, ctxCentre[1]]]
+  // ]
 
-  var planetDiameter = 1274200000
-  var planetRadius = planetDiameter / 2.0
-  var planetCenter = new Vector(planetRadius, planetRadius, planetRadius)
+//   var planetDiameter = 1274200000
+//   var planetRadius = planetDiameter / 2.0
+//   var planetCenter = new Vector(planetRadius, planetRadius, planetRadius)
 
-  this.planet = [
-    new Vector(-planetRadius, planetRadius, planetRadius, 1),
-    new Vector(planetRadius, planetRadius, planetRadius, 1),
-    new Vector(-planetRadius, -planetRadius, planetRadius, 1),
-    new Vector(planetRadius, -planetRadius, planetRadius, 1),
-    new Vector(-planetRadius, planetRadius, -planetRadius, 1),
-    new Vector(planetRadius, planetRadius, -planetRadius, 1),
-    new Vector(-planetRadius, -planetRadius, -planetRadius, 1),
-    new Vector(planetRadius, -planetRadius, -planetRadius, 1)
-  ]
+//   this.planet = [
+//     new Vector(-planetRadius, planetRadius, planetRadius, 1),
+//     new Vector(planetRadius, planetRadius, planetRadius, 1),
+//     new Vector(-planetRadius, -planetRadius, planetRadius, 1),
+//     new Vector(planetRadius, -planetRadius, planetRadius, 1),
+//     new Vector(-planetRadius, planetRadius, -planetRadius, 1),
+//     new Vector(planetRadius, planetRadius, -planetRadius, 1),
+//     new Vector(-planetRadius, -planetRadius, -planetRadius, 1),
+//     new Vector(planetRadius, -planetRadius, -planetRadius, 1)
+//   ]
 
-  for (i = 0; i < this.planet.length; i++) {
-    this.planet[i] = this.matrixOps.vectAdd(this.planet[i], planetCenter)
-  }
+//   for (i = 0; i < this.planet.length; i++) {
+//     this.planet[i] = this.matrixOps.vectAdd(this.planet[i], planetCenter)
+//   }
 
- console.log(this.planet)
+//  console.log(this.planet)
 
-  this.cube = {
+  this.cubeObj = {
   // point: [x, y, z]
     ntl: new Vector(-40.0, 40.0, 40.0, 1),
     ntr: new Vector(40.0, 40.0, 40.0, 1),
@@ -51,6 +51,21 @@ var GameState = function GameState (rotation, renderer, projector, camera, matri
     fbl: new Vector(-40.0, -40.0, -40.0, 1),
     fbr: new Vector(40.0, -40.0, -40.0, 1)
   }
+
+  this.cubeArray = [
+    //front face
+    [this.cubeObj.ntl, this.cubeObj.ntr, this.cubeObj.nbr, this.cubeObj.nbl],
+    // back face
+    [this.cubeObj.ftl, this.cubeObj.ftr, this.cubeObj.fbr, this.cubeObj.fbl],
+    // top left near-far
+    [this.cubeObj.ntl, this.cubeObj.ftl],
+    // bottom left near-far
+    [this.cubeObj.nbl, this.cubeObj.fbl],
+    // top right near-far
+    [this.cubeObj.ntr, this.cubeObj.ftr],
+    // bottom right near-far
+    [this.cubeObj.nbr, this.cubeObj.fbr],
+  ]
 
   this.floor = [
     new Vector(-1000.0, -200.0, 1000.0, 1),
@@ -142,13 +157,6 @@ var GameState = function GameState (rotation, renderer, projector, camera, matri
     this.wall.push([new Vector(500, 1000, i - 100, 1), new Vector(500, -1000, i, 1)])
   }
 
-  this.cubeArray = []
-  this.cubeKeys = Object.keys(this.cube)
-  for (i = 0; i < this.cubeKeys.length; i++) {
-    this.cubeArray.push(this.cube[this.cubeKeys[i]])
-  }
-  console.log(this.cubeArray)
-
   this.stillGoing = 0
 }
 
@@ -214,10 +222,14 @@ GameState.prototype = {
     var threeDObjectsThisFrameLite = []
     var twoDObjectsThisFrame = []
     var angle = this.stillGoing % 360.0
-    threeDObjectsThisFrame.push(this.rotation.rotateObjectAllAxes(this.cubeArray, angle, angle, angle))
-    threeDObjectsThisFrame.push(this.alter1(this.cubeArray, angle))
-    threeDObjectsThisFrame.push(this.alter2(this.cubeArray, angle))
-    threeDObjectsThisFrame.push(this.alter3(this.cubeArray, angle))
+
+    for(i = 0; i < this.cubeArray.length; i++) {
+      threeDObjectsThisFrameLite.push(this.rotation.rotateObjectAllAxes(this.cubeArray[i], angle, angle, angle))
+      threeDObjectsThisFrameLite.push(this.alter1(this.cubeArray[i], angle))
+      threeDObjectsThisFrameLite.push(this.alter2(this.cubeArray[i], angle))
+      // threeDObjectsThisFrameLite.push(this.alter3(this.cubeArray[i], angle))
+    }
+
     threeDObjectsThisFrame.push(this.floor)
     for (i = 0; i < this.axes.length; i++) {
       threeDObjectsThisFrame.push(this.axes[i])
@@ -236,9 +248,9 @@ GameState.prototype = {
       threeDObjectsThisFrame.push(this.axisLabels[i])
     }
 
-    for (i = 0; i < this.crosshair.length; i++) {
-      twoDObjectsThisFrame.push(this.crosshair[i])
-    }
+    // for (i = 0; i < this.crosshair.length; i++) {
+    //   twoDObjectsThisFrame.push(this.crosshair[i])
+    // }
 
     this.renderer.preRender()
     for (i = 0; i < this.trees.length; i++) {
